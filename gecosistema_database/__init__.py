@@ -22,5 +22,5 @@
 #
 # Created:     31/07/2018
 # ------------------------------------------------------------------------------
-from abstractdb import *
-from sqlitedb import *
+from .abstractdb import *
+from .sqlitedb import *

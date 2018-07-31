@@ -25,7 +25,7 @@
 import os,sys,re
 import sqlite3 as sqlite
 import inspect
-from abstractdb import *
+from .abstractdb import *
 from gecosistema_core import *
 
 
