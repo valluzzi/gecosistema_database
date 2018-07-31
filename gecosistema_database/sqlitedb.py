@@ -33,7 +33,7 @@ class SqliteDB(AbstractDB):
     """
     SqliteDB - Next version of sqlite database wrapper
     """
-    version = "2.0"
+    version = "2.0.1"
 
     def __init__(self, filename=":memory:", modules="", verbose=False):
         """
