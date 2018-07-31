@@ -42,6 +42,8 @@ class SqliteDB(AbstractDB):
         :param modules:
         :param verbose:
         """
+        if verbose:
+            print("SqliteDB version v%s"%self.version)
         AbstractDB.__init__(self, filename )
         self.pragma("synchronous=OFF",verbose=verbose)
         self.pragma("journal_mode=WAL",verbose=verbose)
