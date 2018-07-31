@@ -33,7 +33,7 @@ class SqliteDB(AbstractDB):
     """
     SqliteDB - Next version of sqlite database wrapper
     """
-    version = "2.0.1"
+    version = "2.0.2"
 
     def __init__(self, filename=":memory:", modules="", verbose=False):
         """
@@ -144,6 +144,21 @@ class SqliteDB(AbstractDB):
                     print("function <%s> not found:%s" % (fname,ex1))
         except Exception as ex2:
             print("module <%s> not found. searching <%s>:%s" % (modulename, fnames, ex2))
+
+
+    def GetTables(self, like="%"):
+        """
+        GetTables - Return a list with all tablenames
+        """
+        sql = """
+        SELECT tbl_name FROM sqlite_master      WHERE type IN ('table','view') AND tbl_name LIKE '{like}'
+        UNION
+        SELECT tbl_name FROM sqlite_temp_master WHERE type IN ('table','view') AND tbl_name LIKE '{like}';""";
+        env = {"like": like}
+        table_list = self.execute(sql, env, verbose=False)
+        table_list = [item[0] for item in table_list]
+        return table_list
+
 
     def GetFieldNames(self, tablename, ctype="", typeinfo=False):
         """
