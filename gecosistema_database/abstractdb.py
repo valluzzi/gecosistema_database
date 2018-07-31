@@ -200,3 +200,23 @@ class AbstractDB:
 
         return rows
 
+    def executeMany(self, sql, env={}, values=[], commit=True, verbose=False):
+        """
+        Make a query statetment
+        Returns a cursor
+        """
+        cursor = self.__get_cursor__()
+        line = sformat(sql, env)
+        try:
+            t1 = time.time()
+            cursor.executemany(line, values)
+            if commit:
+                self.conn.commit()
+            t2 = time.time()
+            if verbose:
+                line = line.encode('ascii', 'ignore').replace("\n", " ")
+                print("->%s:Done in (%.2f)s" % (line[:], (t2 - t1)))
+
+        except Exception as ex:
+            command = command.encode('ascii', 'ignore').replace("\n", " ")
+            print( "No!:SQL Exception:%s :(%s)"%(command,ex))

@@ -143,6 +143,52 @@ class SqliteDB(AbstractDB):
         except Exception as ex2:
             print("module <%s> not found. searching <%s>:%s" % (modulename, fnames, ex2))
 
+    def GetFieldNames(self, tablename, ctype="", typeinfo=False):
+        """
+        GetFieldNames
+        """
+        env = {"tablename": tablename.strip("[]")}
+        sql = """PRAGMA table_info([{tablename}])"""
+        info = self.execute(sql, env)
+        if typeinfo:
+            if not ctype:
+                return [(name, ftype) for (cid, name, ftype, notnull, dflt_value, pk) in info]
+            else:
+                return [(name, ftype) for (cid, name, ftype, notnull, dflt_value, pk) in info if (ftype in ctype)]
+        else:
+            if not ctype:
+                return [name for (cid, name, ftype, notnull, dflt_value, pk) in info]
+            else:
+                return [name for (cid, name, ftype, notnull, dflt_value, pk) in info if (ftype in ctype)]
+
+        return []
+
+    def insertMany(self, tablename, values, commit=True, verbose=False):
+        """
+        insertMany
+        """
+        if isinstance(values, (tuple, list,)) and len(values) > 0:
+            # list of tuples
+            if isinstance(values[0], (tuple, list,)):
+                n = len(values[0])
+                env = {"tablename": tablename, "question_marks": ",".join(["?"] * n)}
+                sql = """INSERT OR REPLACE INTO [{tablename}] VALUES({question_marks});"""
+            # list of objects
+            elif isinstance(values[0], (dict,)):
+                fieldnames = [item for item in values[0].keys() if item in self.GetFieldNames(tablename)]
+                data = []
+                for row in values:
+                    data.append([row[key] for key in fieldnames])
+
+                n = len(fieldnames)
+                env = {"tablename": tablename, "fieldnames": ",".join(wrap(fieldnames, "[", "]")),
+                       "question_marks": ",".join(["?"] * n)}
+                sql = """INSERT OR REPLACE INTO [{tablename}]({fieldnames}) VALUES({question_marks});"""
+                values = data
+            else:
+                return
+
+            self.executeMany(sql, env, values, commit, verbose)
 
     def Execute(text, env=None, outputmode="cursor", verbose=False):
         """
