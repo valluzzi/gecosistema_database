@@ -94,7 +94,7 @@ class AbstractDB:
         lines = [line for line in lines if len(line) > 0 and not line.startswith(comment2)]
         lines = [line for line in lines if len(line) > 0 and not line.startswith(comment3)]
 
-        if False:
+        if verbose:
             for j in range(len(lines)):
                 print("%s) %s"%(j,lines[j]))
                 print("-"*80)
