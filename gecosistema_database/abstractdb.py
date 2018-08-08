@@ -90,6 +90,8 @@ class AbstractDB:
         lines = [split(line, comment3, "'\"")[0] for line in lines]
         lines = [line.strip(" \t") for line in lines]
 
+        print lines
+
         # follow statement remove all lines of comments
         lines = [line for line in lines if len(line) > 0 and not line.startswith(comment1)]
         lines = [line for line in lines if len(line) > 0 and not line.startswith(comment2)]
