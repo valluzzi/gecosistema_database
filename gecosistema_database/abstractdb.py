@@ -82,6 +82,7 @@ class AbstractDB:
         comment3 = "//"
         sql = re.sub(r'(\r\n|\n)','\n',sql,re.I)
         lines = split(sql, "\n", "'\"")
+        print lines
 
         # follow statement remove comments after SQL line code.
         lines = [split(line, comment1, "'\"")[0] for line in lines]
