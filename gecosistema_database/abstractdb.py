@@ -23,6 +23,7 @@
 # Created:     31/07/2018
 # ------------------------------------------------------------------------------
 import os,sys,re
+import unicodecsv as csv
 import time
 from gecosistema_core import *
 
@@ -254,7 +255,8 @@ class AbstractDB:
                 line = columnnames
                 writer.writerow(line)
                 for row in cursor:
-                    row = [("%s" % (item if item != None else "")) for item in row]
+                    row = [("%s"% (item if item != None else ""))  for item in row]
+                    #row = [item for item in row]
                     if decimal == ",":
                         row = [item.replace(".", ",") for item in row]
                     writer.writerow(row)

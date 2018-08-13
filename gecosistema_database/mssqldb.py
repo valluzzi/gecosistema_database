@@ -100,8 +100,8 @@ class mssqlDB(AbstractDB):
         GetTables - Return a list with all tablenames
         """
         env = {"like":like}
-        return self.execute("""SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_NAME LIKE '{like}';""",env,outputmode="array",verbose=verbose)
-
+        tables = self.execute("""SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_NAME LIKE '{like}';""",env,outputmode="array",verbose=verbose)
+        return [item for (item,) in tables]
 
     def GetFieldNames(self, tablename, ctype="%", typeinfo=False):
         """
@@ -147,4 +147,5 @@ if __name__ == "__main__":
     cursor = db.execute("""SELECT TOP(5) comune FROM  [{database}].[dbo].[{tablename}]""", env, verbose=True)
     #print(cursor)
 
-    print db.GetFieldNames("civici","varchar",typeinfo=True)
+    filename = Desktop()+"/civici.csv"
+    print db.toCsv(filename, tables="civici", sep=";", decimal=".", verbose=True)
