@@ -24,15 +24,19 @@
 # ------------------------------------------------------------------------------
 import os,sys,re
 import pyodbc
-from .abstractdb import *
+from abstractdb import *
 from gecosistema_core import *
 
 
 def __readmssqlstring__(text):
-    #   "dbname='Catasto' host=.\SQLEXPRESS user='sa' password='12345' srid=4326 type=MultiPolygon table="dbo"."SearchComboBox" (Geometry) sql="  from .qgs file
-    #   "MSSQL:server=.\SQLEXPRESS;trusted_connection=no;uid=sa;pwd=12345;database=Catasto;"   MSSQLSpatial dns
-    #   "DRIVER={SQL Server};SERVER=.\SQLEXPRESS;PORT=1433;DATABASE=Catasto;uid=sa;pwd=12345"  ODBC
-    #
+    """
+    __readmssqlstring__
+
+        "dbname='Catasto' host=.\SQLEXPRESS user='sa' password='12345' srid=4326 type=MultiPolygon table="dbo"."SearchComboBox" (Geometry) sql="  from .qgs file
+        "MSSQL:server=.\SQLEXPRESS;trusted_connection=no;uid=sa;pwd=12345;database=Catasto;"   MSSQLSpatial dns
+        "DRIVER={SQL Server};SERVER=.\SQLEXPRESS;PORT=1433;DATABASE=Catasto;uid=sa;pwd=12345"  ODBC
+
+    """
     env = {}
     DICTIONARY = {
         "host": "server",
@@ -91,19 +95,28 @@ class mssqlDB(AbstractDB):
             self.close()
 
 
-
-
-    def GetTables(self, like="%"):
+    def GetTables(self, like="%", verbose=False):
         """
         GetTables - Return a list with all tablenames
         """
-        # TODO
+        env = {"like":like}
+        return self.execute("""SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_NAME LIKE '{like}';""",env,outputmode="array",verbose=verbose)
 
 
-    def GetFieldNames(self, tablename, ctype="", typeinfo=False):
+    def GetFieldNames(self, tablename, ctype="%", typeinfo=False):
         """
         GetFieldNames
         """
+        env = {"tablename":tablename, "ctype":ctype}
+
+        #select   COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION, DATETIME_PRECISION,IS_NULLABLE
+        #from INFORMATION_SCHEMA.COLUMNS
+        #where TABLE_NAME = 'civici'
+        if typeinfo:
+            sql = """SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE '{tablename}' AND DATA_TYPE LIKE '{ctype}';"""
+        else:
+            sql = """SELECT COLUMN_NAME            FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE '{tablename}' AND DATA_TYPE LIKE '{ctype}';"""
+        return self.execute(sql, env, outputmode="array", verbose=True)
 
 
     def insertMany(self, tablename, values, commit=True, verbose=False):
@@ -132,4 +145,6 @@ if __name__ == "__main__":
     db = mssqlDB(env)
 
     cursor = db.execute("""SELECT TOP(5) comune FROM  [{database}].[dbo].[{tablename}]""", env, verbose=True)
-    print(cursor)
+    #print(cursor)
+
+    print db.GetFieldNames("civici","varchar",typeinfo=True)

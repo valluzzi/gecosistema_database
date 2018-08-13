@@ -220,3 +220,41 @@ class AbstractDB:
         except Exception as ex:
             command = command.encode('ascii', 'ignore').replace("\n", " ")
             print( "No!:SQL Exception:%s :(%s)"%(command,ex))
+
+
+    def toCsv(self, filename, tables="", sep=";", decimal=".", verbose=True):
+        """
+        Generate a csv file from cursor
+        """
+        ext = justext(filename).lower()
+        filecsv = filename
+        dbtables = [tablename.lower() for tablename in self.GetTables()]
+        tablenames = listify(tables, ';') if tables else dbtables
+
+        for tablename in tablenames:
+
+            if isquery(tablename):
+                cursor = self.execute(tablename, outputmode="cursor")
+            elif tablename.lower() in dbtables:
+                cursor = self.execute("""SELECT * FROM [%s];"""%(tablename), outputmode="cursor")
+            else:
+                continue
+
+            metadata = cursor.description
+            columnnames = [item[0] for item in metadata]
+
+            if len(tablenames) > 1:
+                filecsv = forceext(filename, "[%s].%s" % (tablename, ext))
+
+            # Finally write on csv!!
+            with open(filecsv, 'wb') as stream:
+                if verbose:
+                    print("writing <%s>..." % filecsv)
+                writer = csv.writer(stream, dialect='excel', delimiter=sep, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                line = columnnames
+                writer.writerow(line)
+                for row in cursor:
+                    row = [("%s" % (item if item != None else "")) for item in row]
+                    if decimal == ",":
+                        row = [item.replace(".", ",") for item in row]
+                    writer.writerow(row)
