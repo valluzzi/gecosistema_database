@@ -338,7 +338,7 @@ class AbstractDB:
                     if jj in columnidxs:
                         # - get style info
                         columnname = all_columns[jj]
-                        if styles.has_key(columnname):
+                        if columnname in style:
                             sj = styles[columnname]
                             style = row[sj]
                         else:
