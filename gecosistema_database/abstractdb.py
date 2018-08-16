@@ -292,7 +292,7 @@ class AbstractDB:
         Generate a excel file from sql query
         """
         ext = justext(filename).lower()
-
+        cursor = None
         dbtables   = self.GetTables()
         tablenames = listify(tables, ';') if tables else dbtables
         if len(tablenames) == 0:
