@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59c31411-1539-4ef2-9446-aa01ab98a322" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gecosistema_database/abstractdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/gecosistema_database/abstractdb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gecosistema_database/mssqldb.py" beforeDir="false" afterPath="$PROJECT_DIR$/gecosistema_database/mssqldb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,23 +33,23 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1165" />
+          <entry key="py" value="1284" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1165" />
+          <entry key="Python" value="1284" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gecosistema_database/abstractdb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2100">
-              <caret line="308" column="38" selection-start-line="308" selection-start-column="38" selection-end-line="308" selection-end-column="38" />
+            <state relative-caret-position="390">
+              <caret line="309" column="17" selection-start-line="309" selection-start-column="17" selection-end-line="309" selection-end-column="17" />
               <folding>
                 <element signature="e#928#944#0" expanded="true" />
               </folding>
@@ -60,11 +57,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
+            <state relative-caret-position="54">
+              <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -104,17 +101,17 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/mssqldb.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/abstractdb.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
-    <option name="y" value="-1088" />
-    <option name="width" value="1936" />
-    <option name="height" value="1096" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -200,11 +197,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-1088" width="1936" height="1096" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.2647975" visible="true" weight="0.16174921" />
-      <window_info id="Structure" order="1" sideWeight="0.7352025" side_tool="true" visible="true" weight="0.16174921" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.2651391" visible="true" weight="0.22842261" />
+      <window_info id="Structure" order="1" sideWeight="0.7348609" side_tool="true" visible="true" weight="0.22842261" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -226,13 +223,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2970">
@@ -252,11 +242,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/abstractdb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2100">
-          <caret line="308" column="38" selection-start-line="308" selection-start-column="38" selection-end-line="308" selection-end-column="38" />
+        <state relative-caret-position="390">
+          <caret line="309" column="17" selection-start-line="309" selection-start-column="17" selection-end-line="309" selection-end-column="17" />
           <folding>
             <element signature="e#928#944#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
         </state>
       </provider>
     </entry>
