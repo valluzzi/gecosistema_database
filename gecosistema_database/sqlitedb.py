@@ -207,6 +207,7 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
+    @staticmethod
     def Execute(text, env=None, outputmode="cursor", verbose=False):
         """
         Execute
@@ -251,7 +252,7 @@ class SqliteDB(AbstractDB):
 
         return None
 
-    Execute = staticmethod(Execute)
+    #Execute = staticmethod(Execute)
 
 
 if __name__ == "__main__":
