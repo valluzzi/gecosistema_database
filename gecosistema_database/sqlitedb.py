@@ -264,4 +264,4 @@ if __name__ == "__main__":
     chdir(__file__)
     db =SqliteDB("test")
     db.close()
-    print SqliteDB.Execute(sql,outputmode="array",verbose=False)
+    #print SqliteDB.Execute(sql,outputmode="array",verbose=False)
