@@ -207,7 +207,6 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
-    @memoize
     @staticmethod
     def Execute(text, env=None, outputmode="cursor", verbose=False):
         """
