@@ -307,9 +307,8 @@ class AbstractDB:
             if isquery(tablename):
                 cursor = self.getCursorFor(tablename)
                 tablename = tempname("tmp-")
-
             elif tablename.lower() in lower(dbtables):
-                cursor = self.select(tablename, outputmode=cursor)
+                cursor = self.select(tablename, outputmode='cursor')
             else:
                 continue
 
