@@ -222,6 +222,32 @@ class AbstractDB:
             command = command.encode('ascii', 'ignore').replace("\n", " ")
             print( "No!:SQL Exception:%s :(%s)"%(command,ex))
 
+    def select(self, tablename, fieldnames="*", orderby="", limit=-1, outputmode="array", verbose=False):
+        """
+        select
+        """
+        fieldnames = ",".join(wrap(listify(fieldnames, ","), "[", "]")) if fieldnames != "*" else fieldnames
+        orderby = ",".join(wrap(listify(orderby, ","), "[", "]"))
+        env = {
+            "tablename": tablename,
+            "fieldnames": fieldnames,
+            "where_clause": "",
+            "group_by_clause": "",
+            "having_clause": "",
+            "order_by_clause": "ORDER BY %s" % orderby if orderby else "",
+            "limit_clause": "LIMIT %d" % limit if limit >= 0 else ""
+        }
+        sql = """
+        SELECT {fieldnames} 
+            FROM [{tablename}]
+                {where_clause}
+            {group_by_clause}
+            {having_clause}
+            {order_by_clause}
+                {limit_clause};
+        """
+        return self.execute(sql, env, outputmode=outputmode, verbose=verbose)
+
 
     def toCsv(self, filename, tables="", sep=";", decimal=".", verbose=True):
         """
@@ -260,3 +286,72 @@ class AbstractDB:
                     if decimal == ",":
                         row = [item.replace(".", ",") for item in row]
                     writer.writerow(row)
+
+    def toExcel(self, filename, tables="", verbose=False):
+        """
+        Generate a excel file from sql query
+        """
+        ext = justext(filename).lower()
+
+        dbtables   = self.GetTables()
+        tablenames = listify(tables, ';') if tables else dbtables
+        if len(tablenames) == 0:
+            return False
+        # Create or open the workbook
+        wb = Workbook(type=ext)
+
+        for tablename in tablenames:
+            if verbose:
+                print("adding <%s>..." % tablename)
+
+            if isquery(tablename):
+                cursor = self.getCursorFor(tablename)
+                tablename = tempname("tmp-")
+            else:
+                if tablename.lower() in lower(dbtables):
+                    cursor = self.select(tablename, outputmode=cursor)
+                else:
+                    continue
+
+            # Get an existing sheet or create a new one
+            sheet = wb.add_sheet(tablename)
+            metadata = cursor.description
+
+            all_columns = [item[0] for item in metadata]
+            columnnames = [item for item in all_columns if not item.startswith("style-")]
+            columnidxs = [all_columns.index(item) for item in columnnames]
+
+            styles = {}
+            for columnname in columnnames:
+                if "style-" + columnname in all_columns:
+                    styles[columnname] = all_columns.index("style-" + columnname)  # index of column-style related
+
+            # Write the header
+            i = 0
+            for j in range(len(columnnames)):
+                sheet.cell(i, j, columnnames[j])
+            i = 1
+            # For each row,column  write ...
+            for row in cursor:
+                j = 0
+                for jj in range(len(row)):
+                    # eclude style-column
+                    if jj in columnidxs:
+                        # - get style info
+                        columnname = all_columns[jj]
+                        if styles.has_key(columnname):
+                            sj = styles[columnname]
+                            style = row[sj]
+                        else:
+                            style = None
+                        # ---
+
+                        value = row[jj]
+                        if value != None:
+                            sheet.cell(i, j, value, style)
+
+                        j += 1
+                i += 1
+
+        wb.save(filename)
+        return True

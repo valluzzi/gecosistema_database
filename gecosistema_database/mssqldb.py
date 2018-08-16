@@ -148,4 +148,6 @@ if __name__ == "__main__":
     #print(cursor)
 
     filename = Desktop()+"/civici.csv"
-    print db.toCsv(filename, tables="civici", sep=";", decimal=".", verbose=True)
+    #print db.toCsv(filename, tables="civici", sep=";", decimal=".", verbose=True)
+
+    print db.toExcel(filename, tables="civici", sep=";", decimal=".", verbose=True)
