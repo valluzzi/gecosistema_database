@@ -307,11 +307,11 @@ class AbstractDB:
             if isquery(tablename):
                 cursor = self.getCursorFor(tablename)
                 tablename = tempname("tmp-")
+
+            elif tablename.lower() in lower(dbtables):
+                cursor = self.select(tablename, outputmode=cursor)
             else:
-                if tablename.lower() in lower(dbtables):
-                    cursor = self.select(tablename, outputmode=cursor)
-                else:
-                    continue
+                continue
 
             # Get an existing sheet or create a new one
             sheet = wb.add_sheet(tablename)

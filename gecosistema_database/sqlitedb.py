@@ -252,8 +252,6 @@ class SqliteDB(AbstractDB):
 
         return None
 
-    #Execute = staticmethod(Execute)
-
 
 if __name__ == "__main__":
     sql = """
@@ -261,7 +259,3 @@ if __name__ == "__main__":
     SELECT 0;
     SELECT md5("HELLO WORLD"), Desktop();
     """
-    chdir(__file__)
-    db =SqliteDB("test")
-    db.close()
-    #print SqliteDB.Execute(sql,outputmode="array",verbose=False)
