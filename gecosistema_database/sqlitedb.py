@@ -57,7 +57,7 @@ class SqliteDB(AbstractDB):
         """
         try:
             if not self.dsn.startswith(":"):
-                self.dsn = forceext(self.dsn,"sqlite")
+                self.dsn = forceext(self.dsn,"sqlite") if justext(self.dsn)=="" else self.dsn
             self.conn = sqlite.connect(self.dsn)
 
         except sqlite.Error as err:
