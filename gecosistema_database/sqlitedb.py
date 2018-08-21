@@ -29,6 +29,7 @@ from .abstractdb import *
 from gecosistema_core import *
 
 
+
 def splitby(pattern, text, flags=0):
     """
     splitby -  split text by pattern
@@ -247,6 +248,7 @@ class SqliteDB(AbstractDB):
                 else:
                     db = SqliteDB(":memory:")
             else:
+                #no database selected
                 continue
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
@@ -262,7 +264,8 @@ class SqliteDB(AbstractDB):
                 db.load_function(modulename, fnames, verbose=verbose)
 
             # 2) execute the script
-            env = env if env else {}
+            env = env.copy() if env else {}
+            env = env.update(os.environ)
             res = db.execute(text, env, outputmode=outputmode, verbose=verbose)
 
         return res
