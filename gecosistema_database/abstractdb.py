@@ -108,13 +108,15 @@ class AbstractDB:
 
         return sql, env
 
-    def execute(self, sql, env={}, outputmode="array", commit=True, verbose=False, stop_on_error=True):
+    def execute(self, sql, env=None, outputmode="array", commit=True, verbose=False, stop_on_error=True):
         """
         Make a query statement list
         Returns a cursor
         """
         rows = []
         cursor = self.__get_cursor__()
+        env = env.copy() if env else {}
+        env.update(os.environ)
         if cursor:
             sql, env = self.__prepare_query__(sql, env, verbose)
 

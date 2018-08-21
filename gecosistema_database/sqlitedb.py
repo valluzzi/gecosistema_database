@@ -264,8 +264,7 @@ class SqliteDB(AbstractDB):
                 db.load_function(modulename, fnames, verbose=verbose)
 
             # 2) execute the script
-            env = env.copy() if env else {}
-            env = env.update(os.environ)
+            env = env if env else {}
             res = db.execute(text, env, outputmode=outputmode, verbose=verbose)
 
         return res
