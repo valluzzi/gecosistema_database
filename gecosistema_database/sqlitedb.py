@@ -29,6 +29,24 @@ from .abstractdb import *
 from gecosistema_core import *
 
 
+def splitby(pattern, text, flags=0):
+    """
+    splitby -  split text by pattern
+    """
+    res = []
+    idxs = [0]
+    p = re.compile(pattern, flags)
+    for m in p.finditer(text):
+        #print m.start(), m.group()
+        idxs+= [m.start()]
+    idxs+=[len(text)+1]
+    for j in range(1,len(idxs)):
+        start = idxs[j-1]
+        end = idxs[j]
+        res.append( text[start:end])
+    return res
+
+
 class SqliteDB(AbstractDB):
     """
     SqliteDB - Next version of sqlite database wrapper
@@ -212,32 +230,29 @@ class SqliteDB(AbstractDB):
         """
         Execute
         """
-        # 1) detect dsn to use
         db = False
-        if text:
-            text = sformat(filetostr(text), env) if isfile(text) else text
-
+        res = None
+        text = sformat(filetostr(text), env) if isfile(text) else text
+        #1) Split text into branch
+        branchs = splitby(r'SELECT\s+\'.*\'\s*;',text, re.I)
+        for text in branchs:
+            # 1a) detect dsn to use
             g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*;', text, flags=re.I | re.M)
             if g:
                 filedb = g.groupdict()["filedb"]
-                #filedb = forceext(filedb, "sqlite")
                 filexls = forceext(filedb, "xls")
 
                 if isfile(filedb):
                     db = SqliteDB(filedb)
-                #elif isfile(filexls) and not isfile(filedb):
-                #    db = SqliteDB.FromXls(filexls, temp=False)
-        if not db:
-            db = SqliteDB(":memory:")
+                else:
+                    db = SqliteDB(":memory:")
 
-        # 2a) detect load_extension and enable extension loading
-        if text and db:
+            # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
             if g:
                 db.conn.enable_load_extension(True)
 
-        # 2b) detect functions to load
-        if text and db:
+            # 1c) detect functions to load
             imports = re.findall(
                 r'^\s*--\s*from\s*(?P<modulename>\w+)\s+import\s+(?P<fname>(?:\w+(?:\s*,\s*\w+)*)|(?:\*))\s*', text,
                 flags=re.I | re.M)
@@ -245,12 +260,11 @@ class SqliteDB(AbstractDB):
             for (modulename, fnames) in imports:
                 db.load_function(modulename, fnames, verbose=verbose)
 
-        # 3) execute the script
-        if db:
+            # 2) execute the script
             env = env if env else {}
-            return db.execute(text, env, outputmode=outputmode, verbose=verbose)
+            res = db.execute(text, env, outputmode=outputmode, verbose=verbose)
 
-        return None
+        return res
 
 
 if __name__ == "__main__":
