@@ -220,7 +220,7 @@ class SqliteDB(AbstractDB):
             g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*;', text, flags=re.I | re.M)
             if g:
                 filedb = g.groupdict()["filedb"]
-                filedb = forceext(filedb, "sqlite")
+                #filedb = forceext(filedb, "sqlite")
                 filexls = forceext(filedb, "xls")
 
                 if isfile(filedb):
