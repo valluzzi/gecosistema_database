@@ -128,14 +128,13 @@ class AbstractDB:
                 try:
                     t1 = time.time()
                     command = sformat(command, env)
+                    print command
                     cursor.execute(command)
 
                     if commit==True and not command.upper().strip(' \r\n').startswith("SELECT"):
                          self.conn.commit()
 
                     env.update(os.environ)
-                    if 'filename' in env:
-                        print 'filename:',env['filename']
 
                     t2 = time.time()
 
