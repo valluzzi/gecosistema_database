@@ -22,20 +22,24 @@
 #
 # Created:     22/08/2018
 # -------------------------------------------------------------------------------
+from .sqlitedb import SqliteDB
+from gecosistema_core import filetostr,isfile,JSONResponse
 
 def SQLResponse(sql, env={}, start_response=None, verbose=False):
     """
     SQLResponse
     """
-    res = {"status": "fail", "success": False, "exception": "%s" % ex, "sql": sql}
 
-    try:
-        sql = filetostr(sql) if isfile(sql) else sql
 
-        res = SqliteDB.Execute(sql, env, outputmode="response", verbose=verbose)
-    except Exception as ex:
+    if sql:
+        try:
+            sql = filetostr(sql) if isfile(sql) else sql
 
-        return JSONResponse(res, start_response)
+            res = SqliteDB.Execute(sql, env, outputmode="response", verbose=verbose)
+        except Exception as ex:
+            res = {"status": "fail", "success": False, "exception": "%s" % ex, "sql": sql}
+            return JSONResponse(res, start_response)
 
     # anyway
+    res = {"status": "fail", "success": False, "exception": "sql not defined", "sql": ""}
     return JSONResponse(res, start_response)
