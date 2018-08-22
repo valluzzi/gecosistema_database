@@ -24,3 +24,4 @@
 # ------------------------------------------------------------------------------
 from .abstractdb import *
 from .sqlitedb import *
+from .http import *
