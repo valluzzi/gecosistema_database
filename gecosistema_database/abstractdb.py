@@ -132,6 +132,8 @@ class AbstractDB:
                     if commit==True and not command.upper().strip(' \r\n').startswith("SELECT"):
                          self.conn.commit()
 
+                    if "filename" in os.environ:
+                        print "ok!!!!"
                     env.update(os.environ)
 
                     t2 = time.time()
