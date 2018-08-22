@@ -135,11 +135,6 @@ class AbstractDB:
 
                     env.update(os.environ)
 
-                    if 'filename' in os.environ:
-                        for key in env:
-                            print key,":",env[key]
-                            print "--"*40
-
                     t2 = time.time()
 
                     if verbose:

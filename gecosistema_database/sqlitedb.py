@@ -264,7 +264,9 @@ class SqliteDB(AbstractDB):
                 db.load_function(modulename, fnames, verbose=verbose)
 
             # 2) execute the script
-            env = env if env else {}
+            for key in env:
+                print key
+                print "__"*40
             res = db.execute(text, env, outputmode=outputmode, verbose=verbose)
 
         return res
