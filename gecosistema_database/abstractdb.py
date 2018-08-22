@@ -139,6 +139,8 @@ class AbstractDB:
                     if verbose:
                         command = command.encode('ascii', 'ignore').replace("\n", " ")
                         print("->%s:Done in (%.4f)s" % (command[:], (t2 - t1)))
+                        for key in env:
+                            print key,":",env[key]
 
                 except Exception as ex:
                     command = command.encode('ascii', 'ignore').replace("\n", " ")
