@@ -29,17 +29,15 @@ def SQLResponse(sql, env={}, start_response=None, verbose=False):
     """
     SQLResponse
     """
-
-
     if sql:
         try:
             sql = filetostr(sql) if isfile(sql) else sql
-
             res = SqliteDB.Execute(sql, env, outputmode="response", verbose=verbose)
+            return JSONResponse(res, start_response)
         except Exception as ex:
             res = {"status": "fail", "success": False, "exception": "%s" % ex, "sql": sql}
             return JSONResponse(res, start_response)
 
     # anyway
-    res = {"status": "fail", "success": False, "exception": "sql not defined", "sql": ""}
+    res = {"status": "fail", "success": False, "exception": "sql not defined", "sql": sql}
     return JSONResponse(res, start_response)
