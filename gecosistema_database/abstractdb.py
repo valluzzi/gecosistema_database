@@ -134,6 +134,8 @@ class AbstractDB:
                          self.conn.commit()
 
                     env.update(os.environ)
+                    if 'filename' in env:
+                        print 'filename:',env['filename']
 
                     t2 = time.time()
 
