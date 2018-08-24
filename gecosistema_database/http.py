@@ -31,7 +31,6 @@ def SQLResponse(sql, env={}, start_response=None, verbose=False):
     """
     if sql:
         try:
-            sql = filetostr(sql) if isfile(sql) else sql
             res = SqliteDB.Execute(sql, env, outputmode="response", verbose=verbose)
             return JSONResponse(res, start_response)
         except Exception as ex:

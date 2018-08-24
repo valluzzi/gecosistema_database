@@ -237,6 +237,9 @@ class SqliteDB(AbstractDB):
         #1) Split text into branch
         branchs = splitby(r'SELECT\s+\'.*\'\s*;',text, re.I)
         for text in branchs:
+            # 1)
+            if text.strip().startswith("SELECT 'EXIT';"):
+                break
             # 1a) detect dsn to use
             g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*;', text, flags=re.I | re.M)
             if g:
