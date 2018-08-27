@@ -108,7 +108,7 @@ class AbstractDB:
 
         return sql, env
 
-    def execute(self, sql, env=None, outputmode="array", commit=True, verbose=False, manage_exceptions=True):
+    def execute(self, sql, env=None, outputmode="array", commit=True, verbose=False):
         """
         Make a query statement list
         Returns a cursor
@@ -127,35 +127,13 @@ class AbstractDB:
             for command in commands:
                 t1 = time.time()
                 command = sformat(command, env)
-                if manage_exceptions:
-                    try:
 
-                        cursor.execute(command)
+                try:
 
-                        if commit==True and not command.upper().strip(' \r\n').startswith("SELECT"):
-                             self.conn.commit()
-
-                        env.update(os.environ)
-
-                        t2 = time.time()
-
-                        if verbose:
-                            command = command.encode('ascii', 'ignore').replace("\n", " ")
-                            print("->%s:Done in (%.4f)s" % (command[:], (t2 - t1)))
-
-                    except Exception as ex:
-                        command = command.encode('ascii', 'ignore').replace("\n", " ")
-                        print( "No!:SQL Exception:%s :(%s)"%(command,ex))
-
-                        if outputmode == "response":
-                            res = {"status": "fail", "success": False, "exception": ex, "sql": command}
-                            return res
-
-                else:
                     cursor.execute(command)
 
-                    if commit == True and not command.upper().strip(' \r\n').startswith("SELECT"):
-                        self.conn.commit()
+                    if commit==True and not command.upper().strip(' \r\n').startswith("SELECT"):
+                         self.conn.commit()
 
                     env.update(os.environ)
 
@@ -165,6 +143,13 @@ class AbstractDB:
                         command = command.encode('ascii', 'ignore').replace("\n", " ")
                         print("->%s:Done in (%.4f)s" % (command[:], (t2 - t1)))
 
+                except Exception as ex:
+                    command = command.encode('ascii', 'ignore').replace("\n", " ")
+                    print( "No!:SQL Exception:%s :(%s)"%(command,ex))
+
+                    if outputmode == "response":
+                        res = {"status": "fail", "success": False, "exception": ex, "sql": command}
+                        return res
 
             if outputmode == "cursor":
                 return cursor
