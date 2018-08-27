@@ -246,10 +246,8 @@ class SqliteDB(AbstractDB):
                 filedb = g.groupdict()["filedb"]
                 filexls = forceext(filedb, "xls")
 
-                if isfile(filedb):
-                    db = SqliteDB(filedb)
-                else:
-                    db = SqliteDB(":memory:")
+                db = SqliteDB(filedb)
+
             else:
                 #no database selected
                 continue
