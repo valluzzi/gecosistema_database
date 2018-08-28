@@ -22,10 +22,12 @@
 #
 # Created:     28/08/2018
 # -------------------------------------------------------------------------------
+import numpy as np
+from scipy import stats
 
-class Ensamble:
+class Ensemble:
     """
-    Ensamble
+    Ensemble
     """
     def __init__(self):
         self.p = 0.5

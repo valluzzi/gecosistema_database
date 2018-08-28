@@ -28,5 +28,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
     #apt-get install unixodbc
-    install_requires=['gecosistema_core','unicodecsv','pyodbc']
+    install_requires=['gecosistema_core','unicodecsv','pyodbc','numpy','scipy']
 )
