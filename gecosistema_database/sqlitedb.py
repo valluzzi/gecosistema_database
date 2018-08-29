@@ -235,13 +235,13 @@ class SqliteDB(AbstractDB):
         res = None
         text = sformat(filetostr(text), env) if isfile(text) else text
         #1) Split text into branch
-        branchs = splitby(r'SELECT\s+[\'\"\[]?.*[\'\"\]]?\s*;',text, re.I)
+        branchs = splitby(r'SELECT\s+\'.*\'\s*;',text, re.I)
         for text in branchs:
             # 1)
             if text.strip().startswith("SELECT 'EXIT';"):
                 break
             # 1a) detect dsn to use
-            g = re.search(r'^SELECT\s+[\'\"\[]?(?P<filedb>.*)[\'\"\]]?\s*;', text, flags=re.I | re.M)
+            g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*;', text, flags=re.I | re.M)
             if g:
                 filedb = g.groupdict()["filedb"]
                 filexls = forceext(filedb, "xls")
