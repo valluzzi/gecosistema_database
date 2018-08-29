@@ -31,8 +31,8 @@ def SQL_EXEC(sql, args):
     """
     try:
         env = mapify(args, sep=' ', kvsep='=', strip_char=' ', glue='"')
-        SqliteDB.Execute(sql, env, verbose=False)
-        return 1
+        res = SqliteDB.Execute(sql, env, outputmode = 'response', verbose=False)
+        return res
     except Exception as ex:
         print("--------------------------")
         print(ex)
