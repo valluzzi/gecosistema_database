@@ -43,6 +43,8 @@ def SQL_EXEC(sql, args):
         SqliteDB.Execute(sql, env)
         return 1
     except Exception as ex:
+        print("--------------------------")
         print(ex)
-
+        print("--------------------------")
+        
     return 0
