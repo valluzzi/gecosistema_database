@@ -36,15 +36,15 @@ def SQL_EXEC(sql, args):
             # load args in the environment
             for j in range(len(args)):
                 arr = args[j].split("=", 1)
-                varname = arr[0]
-                value   = arr[1] if len(arr) > 1 else ""
+                varname = arr[0].strip('"')
+                value   = arr[1].strip('"') if len(arr) > 1 else ""
                 env[varname] = value
 
-        SqliteDB.Execute(sql, env)
+        SqliteDB.Execute(sql, env, verbose=False)
         return 1
     except Exception as ex:
         print("--------------------------")
         print(ex)
         print("--------------------------")
-        
+
     return 0
