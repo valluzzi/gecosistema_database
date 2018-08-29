@@ -1,6 +1,6 @@
-# ------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Licence:
-# Copyright (c) 2012-2018 Luzzi Valerio
+# Copyright (c) 2012-2018 Luzzi Valerio 
 #
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
@@ -15,15 +15,17 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 #
-# Name:        __init__.py
+# Name:        functions.py
 # Purpose:
 #
 # Author:      Luzzi Valerio
 #
-# Created:     31/07/2018
-# ------------------------------------------------------------------------------
-from .abstractdb import *
-from .sqlitedb import *
-from .http import *
-from .functions import *
-from .aggregates import *
+# Created:     29/08/2018
+# -------------------------------------------------------------------------------
+from .sqlitedb import SqliteDB
+
+def SQL_EXEC(sql):
+    """
+    SQL_EXEC - run a query o a file.sql
+    """
+    return SqliteDB.Exec(sql)
