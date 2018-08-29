@@ -29,14 +29,19 @@ def SQL_EXEC(sql, args):
     """
     SQL_EXEC - run a query o a file.sql
     """
-    env = {}
-    args = split(args, sep=" ", glue='"', removeEmpty=True)
-    if len(args):
-        # load args in the environment
-        for j in range(len(args)):
-            arr = args[j].split("=", 1)
-            varname = arr[0]
-            value   = arr[1] if len(arr) > 1 else ""
-            env[varname] = value
+    try:
+        env = {}
+        args = split(args, sep=" ", glue='"', removeEmpty=True)
+        if len(args):
+            # load args in the environment
+            for j in range(len(args)):
+                arr = args[j].split("=", 1)
+                varname = arr[0]
+                value   = arr[1] if len(arr) > 1 else ""
+                env[varname] = value
 
-    return SqliteDB.Execute(sql, env, outputmode="response")
+        return SqliteDB.Execute(sql, env, outputmode="response")
+    except Exception as ex:
+        print(ex)
+
+    return {}
