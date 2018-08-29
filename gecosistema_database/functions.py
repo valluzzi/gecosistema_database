@@ -22,10 +22,21 @@
 #
 # Created:     29/08/2018
 # -------------------------------------------------------------------------------
+from gecosistema_core import split
 from .sqlitedb import SqliteDB
 
-def SQL_EXEC(sql):
+def SQL_EXEC(sql, args):
     """
     SQL_EXEC - run a query o a file.sql
     """
-    return SqliteDB.Exec(sql)
+    env = {}
+    args = split(args, sep=" ", glue='"', removeEmpty=True)
+    if len(args):
+        # load args in the environment
+        for j in range(len(args)):
+            arr = args[j].split("=", 1)
+            varname = arr[0]
+            value   = arr[1] if len(arr) > 1 else ""
+            env[varname] = value
+
+    return SqliteDB.Execute(sql, env)
