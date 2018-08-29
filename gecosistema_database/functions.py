@@ -39,4 +39,4 @@ def SQL_EXEC(sql, args):
             value   = arr[1] if len(arr) > 1 else ""
             env[varname] = value
 
-    return SqliteDB.Execute(sql, env)
+    return SqliteDB.Execute(sql, env, outputmode="response")
