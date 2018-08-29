@@ -22,7 +22,7 @@
 #
 # Created:     29/08/2018
 # -------------------------------------------------------------------------------
-from gecosistema_core import split
+from gecosistema_core import mapify
 from .sqlitedb import SqliteDB
 
 def SQL_EXEC(sql, args):
@@ -30,16 +30,7 @@ def SQL_EXEC(sql, args):
     SQL_EXEC - run a query o a file.sql
     """
     try:
-        env = {}
-        args = split(args, sep=" ", glue='"', removeEmpty=True)
-        if len(args):
-            # load args in the environment
-            for j in range(len(args)):
-                arr = args[j].split("=", 1)
-                varname = arr[0].strip('"')
-                value   = arr[1].strip('"') if len(arr) > 1 else ""
-                env[varname] = value
-
+        env = mapify(args, sep=' ', kvsep='=', strip_char=' ', glue='"')
         SqliteDB.Execute(sql, env, verbose=False)
         return 1
     except Exception as ex:
