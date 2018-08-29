@@ -250,7 +250,8 @@ class SqliteDB(AbstractDB):
 
             else:
                 #no database selected
-                continue
+                db = SqliteDB(":memory:")
+
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
             if g:

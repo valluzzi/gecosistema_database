@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="59c31411-1539-4ef2-9446-aa01ab98a322" name="Default Changelist" comment="" />
+    <list default="true" id="59c31411-1539-4ef2-9446-aa01ab98a322" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" beforeDir="false" afterPath="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +36,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3153" />
+          <entry key="py" value="3164" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="3153" />
+          <entry key="Python" value="3164" />
         </counts>
       </usages-collector>
     </session>
@@ -106,8 +108,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="237" column="37" lean-forward="true" selection-start-line="237" selection-start-column="37" selection-end-line="237" selection-end-column="37" />
+            <state relative-caret-position="480">
+              <caret line="252" column="40" selection-start-line="252" selection-start-column="40" selection-end-line="252" selection-end-column="40" />
               <folding>
                 <element signature="e#926#942#0" expanded="true" />
               </folding>
@@ -154,8 +156,8 @@
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/aggregates.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/__init__.py" />
-        <option value="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/functions.py" />
+        <option value="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" />
       </list>
     </option>
   </component>
@@ -335,8 +337,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="237" column="37" lean-forward="true" selection-start-line="237" selection-start-column="37" selection-end-line="237" selection-end-column="37" />
+        <state relative-caret-position="480">
+          <caret line="252" column="40" selection-start-line="252" selection-start-column="40" selection-end-line="252" selection-end-column="40" />
           <folding>
             <element signature="e#926#942#0" expanded="true" />
           </folding>
