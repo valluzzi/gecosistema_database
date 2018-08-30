@@ -248,11 +248,15 @@ class SqliteDB(AbstractDB):
 
                 if justext(filedb).lower() in ('db','sqlite'):
                     db = SqliteDB(filedb)
+
+            if not db:
+                #no database selected
+                if "__CURRENTDB__" in os.environ:
+                    db = os.environ["__CURRENTDB__"]
                 else:
                     db = SqliteDB(":memory:")
-            else:
-                #no database selected
-                db = SqliteDB(":memory:")
+
+            os.environ["__CURRENTDB__"] = db
 
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
