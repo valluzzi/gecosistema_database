@@ -34,7 +34,6 @@ def SQL_EXEC(sql, args):
     """
     try:
         env = mapify(args, sep=' ', kvsep='=', strip_char=' ', glue='"')
-        print "SqliteDB.CURRENTDB is <%s>"%(SqliteDB.CURRENTDB)
         res = SqliteDB.Execute(sql, env, outputmode = 'response', verbose=False)
         return unicode(json.dumps(res))
     except Exception as ex:

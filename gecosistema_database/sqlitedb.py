@@ -226,8 +226,6 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
-    CURRENTDB = None
-
     @staticmethod
     def Execute(text, env=None, outputmode="cursor", verbose=False):
         """
@@ -253,13 +251,7 @@ class SqliteDB(AbstractDB):
 
             if not db:
                 #no database selected
-                if SqliteDB.CURRENTDB:
-                    db = SqliteDB.CURRENTDB
-                    print "resuming last db connection... <%s>"%(db.dsn)
-                else:
-                    db = SqliteDB(":memory:")
-
-            SqliteDB.CURRENTDB = db
+                db = SqliteDB(":memory:")
 
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
