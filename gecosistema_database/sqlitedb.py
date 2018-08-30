@@ -226,6 +226,8 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
+    CURRENTDB = None
+
     @staticmethod
     def Execute(text, env=None, outputmode="cursor", verbose=False):
         """
@@ -251,7 +253,12 @@ class SqliteDB(AbstractDB):
 
             if not db:
                 #no database selected
-                db = SqliteDB(":memory:")
+                if CURRENTDB:
+                    db = CURRENTDB
+                else:
+                    db = SqliteDB(":memory:")
+
+            CURRENTDB = db
 
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
