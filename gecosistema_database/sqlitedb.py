@@ -255,6 +255,7 @@ class SqliteDB(AbstractDB):
                 #no database selected
                 if SqliteDB.CURRENTDB:
                     db = SqliteDB.CURRENTDB
+                    print "resuming last db connection... <%s>"%(db.dsn)
                 else:
                     db = SqliteDB(":memory:")
 
