@@ -287,7 +287,6 @@ class SqliteDB(AbstractDB):
         """
         ExecuteP - Parallel
         """
-        db = False
         res = None
         N = cpu_count()
         text = sformat(filetostr(text), env) if isfile(text) else text
