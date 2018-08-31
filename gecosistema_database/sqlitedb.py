@@ -25,10 +25,13 @@
 import os,sys,re
 import sqlite3 as sqlite
 import inspect
-from .abstractdb import *
+try:
+    from .abstractdb import *
+except:
+    from abstractdb import *
 from gecosistema_core import *
-
-
+from Queue import Queue
+from threading import Thread
 
 def splitby(pattern, text, flags=0):
     """
@@ -47,6 +50,14 @@ def splitby(pattern, text, flags=0):
         res.append( text[start:end])
     return res
 
+def sql_worker(q):
+    """
+    sql_worker
+    """
+    while True:
+        sql,env = q.get()
+        SqliteDB.Execute(sql, env, verbose=True)
+        q.task_done()
 
 class SqliteDB(AbstractDB):
     """
@@ -271,10 +282,42 @@ class SqliteDB(AbstractDB):
 
         return res
 
+    @staticmethod
+    def ExecuteP(text, env=None, outputmode="cursor", verbose=False):
+        """
+        ExecuteP - Parallel
+        """
+        db = False
+        res = None
+        N = cpu_count()
+        text = sformat(filetostr(text), env) if isfile(text) else text
+        # 1) Split text into branch
+        branchs = splitby(r'SELECT\s+\'.*\'\s*;', text, re.I)
+        q = Queue(maxsize=0)
+        n = min(len(branchs),N)
+        for j in range(n-1):
+            worker = Thread(target=sql_worker, args=(q,))
+            worker.setDaemon(True)
+            worker.start()
+        for text in branchs[:-1]:
+            if text.strip('\t\r\n '):
+                if "SELECT 'WAIT';" in text:
+                    print "waiting for the slower thread."
+                    q.join()
+                else:
+                    q.put((text, env))
+        print "waiting for all thread."
+        q.join()
+        last_branch = branchs[-1]
+        res = SqliteDB.Execute(last_branch,env,outputmode,verbose)
+        return res
+
 
 if __name__ == "__main__":
-    sql = """
-    -- from gecosistema_core import *
-    SELECT 0;
-    SELECT md5("HELLO WORLD"), Desktop();
-    """
+    import os
+
+    chdir(r'D:\Program Files (x86)\SICURA\apps\irriclime\lib\sql')
+    print os.getcwd()
+
+    text = filetostr(r"test.sql")
+    SqliteDB.ExecuteP(text,{"hello":1})
