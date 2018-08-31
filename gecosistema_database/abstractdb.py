@@ -50,8 +50,6 @@ class AbstractDB:
         """
         Close the db connection
         """
-        print("closing db <%s>" %(self.dsn))
-        print "--------------------------------------------------"
         if self.conn:
             if verbose:
                 print("closing db...")
