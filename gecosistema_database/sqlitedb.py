@@ -56,7 +56,7 @@ def sql_worker(q):
     """
     while True:
         sql,env,outputmode,verbose = q.get()
-        SqliteDB.Execute(sql, env, outputmode, verbose=True)
+        SqliteDB.ExecuteBranch(sql, env, outputmode, verbose=True, q)
         q.task_done()
 
 class SqliteDB(AbstractDB):
@@ -255,9 +255,10 @@ class SqliteDB(AbstractDB):
             q.join()
 
         # 1a) detect dsn to use
-        g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
+        g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
         if g:
             filedb = g.groupdict()["filedb"]
+            print "filedb is <%s>" % (filedb)
             mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else mode
             if justext(filedb).lower() in ('db', 'sqlite'):
                 db = SqliteDB(filedb)
@@ -265,6 +266,7 @@ class SqliteDB(AbstractDB):
             # no database selected
             db = SqliteDB(":memory:")
 
+        print "open <%s>" % (db.dsn)
         # 1b) detect load_extension and enable extension loading
         g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
         if g:
@@ -354,7 +356,7 @@ class SqliteDB(AbstractDB):
 
         q.join()
         last_branch = branchs[-1]
-        res = SqliteDB.Execute(last_branch,env,outputmode,verbose)
+        res = SqliteDB.ExecuteBranch(last_branch,env,outputmode,verbose)
         return res
 
 
