@@ -258,7 +258,6 @@ class SqliteDB(AbstractDB):
         g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
         if g:
             filedb = g.groupdict()["filedb"]
-            print "filedb is <%s>" % (filedb)
             mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else mode
             if justext(filedb).lower() in ('db', 'sqlite'):
                 db = SqliteDB(filedb)
@@ -266,7 +265,6 @@ class SqliteDB(AbstractDB):
             # no database selected
             db = SqliteDB(":memory:")
 
-        print "open <%s>" % (db.dsn)
         # 1b) detect load_extension and enable extension loading
         g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
         if g:
@@ -314,8 +312,6 @@ class SqliteDB(AbstractDB):
             if not db:
                 #no database selected
                 db = SqliteDB(":memory:")
-
-            print "open <%s>"%(db.dsn)
 
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
