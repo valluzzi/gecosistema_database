@@ -301,7 +301,7 @@ class SqliteDB(AbstractDB):
             if text.strip().startswith("SELECT 'EXIT';"):
                 break
             # 1a) detect dsn to use
-            g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*(?:,\s*\'a?sync\')?;', text, flags=re.I | re.M)
+            g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'a?sync\')?;', text, flags=re.I | re.M)
             if g:
                 filedb = g.groupdict()["filedb"]
                 filexls = forceext(filedb, "xls")
