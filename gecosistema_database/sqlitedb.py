@@ -238,7 +238,7 @@ class SqliteDB(AbstractDB):
             self.executeMany(sql, env, values, commit, verbose)
 
     @staticmethod
-    def ExecuteBranch( text, env=None, outpumode="cursor", verbose=False, q=None):
+    def ExecuteBranch( text, env=None, outputmode="cursor", verbose=False, q=None):
         """
         ExecuteBranch
         """
