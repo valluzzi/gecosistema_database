@@ -281,7 +281,7 @@ class SqliteDB(AbstractDB):
             db.load_function(modulename, fnames, verbose=verbose)
 
         # 2) finally execute the script
-        if mode == "sync":
+        if mode == "sync" or not q:
             return db.execute(text, env, outputmode=outputmode, verbose=verbose)
         else:
             if q:
@@ -356,7 +356,7 @@ class SqliteDB(AbstractDB):
 
         q.join()
         last_branch = branchs[-1]
-        res = SqliteDB.ExecuteBranch(last_branch,env,outputmode,verbose)
+        res = SqliteDB.ExecuteBranch(last_branch,env,outputmode,verbose,q = None)
         return res
 
 
