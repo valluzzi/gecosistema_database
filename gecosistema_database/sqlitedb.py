@@ -238,6 +238,55 @@ class SqliteDB(AbstractDB):
             self.executeMany(sql, env, values, commit, verbose)
 
     @staticmethod
+    def ExecuteBranch( text, env=None, outpumode="cursor", verbose=False, q=None):
+        """
+        ExecuteBranch
+        """
+        db = False
+        res = None
+        mode = "sync"
+        # 0) check if text is empty
+        if text.strip('\t\r\n ')=="":
+            return res
+
+        # 0a)
+        g = re.search(r'SELECT\s+\'WAIT\'\s*;', text, flags=re.I | re.M)
+        if g and q:
+            q.join()
+
+        # 1a) detect dsn to use
+        g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
+        if g:
+            filedb = g.groupdict()["filedb"]
+            mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else mode
+            if justext(filedb).lower() in ('db', 'sqlite'):
+                db = SqliteDB(filedb)
+        if not db:
+            # no database selected
+            db = SqliteDB(":memory:")
+
+        # 1b) detect load_extension and enable extension loading
+        g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
+        if g:
+            db.conn.enable_load_extension(True)
+
+        # 1c) detect functions to load
+        imports = re.findall(
+            r'^\s*--\s*from\s*(?P<modulename>\w+)\s+import\s+(?P<fname>(?:\w+(?:\s*,\s*\w+)*)|(?:\*))\s*', text,
+            flags=re.I | re.M)
+        # print ">>",imports
+        for (modulename, fnames) in imports:
+            db.load_function(modulename, fnames, verbose=verbose)
+
+        # 2) finally execute the script
+        if mode == "sync":
+            return db.execute(text, env, outputmode=outputmode, verbose=verbose)
+        else:
+            if q:
+                q.put((text, env, outputmode, verbose))
+        return res
+
+    @staticmethod
     def Execute(text, env=None, outputmode="cursor", verbose=False):
         """
         Execute
@@ -246,13 +295,13 @@ class SqliteDB(AbstractDB):
         res = None
         text = sformat(filetostr(text), env) if isfile(text) else text
         #1) Split text into branch
-        branchs = splitby(r'SELECT\s+\'.*\'\s*;',text, re.I)
+        branchs = splitby(r'SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;',text, re.I)
         for text in branchs:
             # 1)
             if text.strip().startswith("SELECT 'EXIT';"):
                 break
             # 1a) detect dsn to use
-            g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*;', text, flags=re.I | re.M)
+            g = re.search(r'^SELECT\s+\'(?P<filedb>.*)\'\s*(?:,\s*\'a?sync\')?;', text, flags=re.I | re.M)
             if g:
                 filedb = g.groupdict()["filedb"]
                 filexls = forceext(filedb, "xls")
@@ -291,7 +340,7 @@ class SqliteDB(AbstractDB):
         N = cpu_count()
         text = sformat(filetostr(text), env) if isfile(text) else text
         # 1) Split text into branch
-        branchs = splitby(r'SELECT\s+\'.*\'\s*;', text, re.I)
+        branchs = splitby(r'SELECT\s+\'.*\'\s*(?P:,\s*\'a?sync\')?;', text, re.I)
         q = Queue(maxsize=0)
         n = min(len(branchs),N)
         for j in range(n-1):
@@ -299,13 +348,8 @@ class SqliteDB(AbstractDB):
             worker.setDaemon(True)
             worker.start()
         for text in branchs[:-1]:
-            if text.strip('\t\r\n '):
-                if "SELECT 'WAIT';" in text:
-                    print "waiting for the slower thread."
-                    q.join()
-                else:
-                    q.put((text, env))
-        print "waiting for all thread."
+            SqliteDB.ExecuteBranch( text, env, outputmode, verbose, q)
+
         q.join()
         last_branch = branchs[-1]
         res = SqliteDB.Execute(last_branch,env,outputmode,verbose)
