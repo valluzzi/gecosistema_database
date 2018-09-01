@@ -55,8 +55,8 @@ def sql_worker(q):
     sql_worker
     """
     while True:
-        sql,env = q.get()
-        SqliteDB.Execute(sql, env, verbose=True)
+        sql,env,outputmode,verbose = q.get()
+        SqliteDB.Execute(sql, env, outputmode, verbose=True)
         q.task_done()
 
 class SqliteDB(AbstractDB):
