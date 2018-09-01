@@ -340,7 +340,7 @@ class SqliteDB(AbstractDB):
         N = cpu_count()
         text = sformat(filetostr(text), env) if isfile(text) else text
         # 1) Split text into branch
-        branchs = splitby(r'SELECT\s+\'.*\'\s*(?P:,\s*\'a?sync\')?;', text, re.I)
+        branchs = splitby(r'SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;', text, re.I)
         q = Queue(maxsize=0)
         n = min(len(branchs),N)
         for j in range(n-1):
