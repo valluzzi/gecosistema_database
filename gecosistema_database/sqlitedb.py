@@ -313,6 +313,8 @@ class SqliteDB(AbstractDB):
                 #no database selected
                 db = SqliteDB(":memory:")
 
+            print "open <%s>"%(db.dsn)
+
             # 1b) detect load_extension and enable extension loading
             g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
             if g:
