@@ -30,8 +30,9 @@ try:
 except:
     from abstractdb import *
 from gecosistema_core import *
-from Queue import Queue
-from threading import Thread
+#from Queue import Queue
+#from threading import Thread
+from multiprocessing import Pool
 
 def splitby(pattern, text, flags=0):
     """
@@ -50,14 +51,14 @@ def splitby(pattern, text, flags=0):
         res.append( text[start:end])
     return res
 
-def sql_worker(q):
+def sql_worker(args):
     """
     sql_worker
     """
-    while True:
-        sql,env,outputmode,verbose = q.get()
-        SqliteDB.ExecuteBranch(sql, env, outputmode, verbose, None)
-        q.task_done()
+    sql,env,outputmode,verbose = args
+    SqliteDB.ExecuteBranch(sql, env, outputmode, verbose)
+
+
 
 class SqliteDB(AbstractDB):
     """
@@ -238,13 +239,12 @@ class SqliteDB(AbstractDB):
             self.executeMany(sql, env, values, commit, verbose)
 
     @staticmethod
-    def ExecuteBranch( text, env=None, outputmode="cursor", verbose=False, q=None):
+    def ExecuteBranch( text, env=None, outputmode="cursor", verbose=False):
         """
         ExecuteBranch
         """
         db = False
         res = None
-        mode = "sync"
         # 0) check if text is empty
         if text.strip('\t\r\n ')=="":
             return res
@@ -279,55 +279,7 @@ class SqliteDB(AbstractDB):
             db.load_function(modulename, fnames, verbose=verbose)
 
         # 2) finally execute the script
-        if mode == "sync" or not q:
-            return db.execute(text, env, outputmode=outputmode, verbose=verbose)
-        else:
-            if q:
-                q.put((text, env, outputmode, verbose))
-        return res
-
-    @staticmethod
-    def Execute(text, env=None, outputmode="cursor", verbose=False):
-        """
-        Execute
-        """
-        db = False
-        res = None
-        text = sformat(filetostr(text), env) if isfile(text) else text
-        #1) Split text into branch
-        branchs = splitby(r'SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;',text, re.I)
-        for text in branchs:
-            # 1)
-            if text.strip().startswith("SELECT 'EXIT';"):
-                break
-            # 1a) detect dsn to use
-            g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'a?sync\')?;', text, flags=re.I | re.M)
-            if g:
-                filedb = g.groupdict()["filedb"]
-                filexls = forceext(filedb, "xls")
-
-                if justext(filedb).lower() in ('db','sqlite'):
-                    db = SqliteDB(filedb)
-
-            if not db:
-                #no database selected
-                db = SqliteDB(":memory:")
-
-            # 1b) detect load_extension and enable extension loading
-            g = re.search(r'^\s*SELECT load_extension\s*\(.*\)', text, flags=re.I | re.M)
-            if g:
-                db.conn.enable_load_extension(True)
-
-            # 1c) detect functions to load
-            imports = re.findall(
-                r'^\s*--\s*from\s*(?P<modulename>\w+)\s+import\s+(?P<fname>(?:\w+(?:\s*,\s*\w+)*)|(?:\*))\s*', text,
-                flags=re.I | re.M)
-            # print ">>",imports
-            for (modulename, fnames) in imports:
-                db.load_function(modulename, fnames, verbose=verbose)
-
-            # 2) execute the script
-            res = db.execute(text, env, outputmode=outputmode, verbose=verbose)
+        res= db.execute(text, env, outputmode=outputmode, verbose=verbose)
 
         return res
 
@@ -341,18 +293,16 @@ class SqliteDB(AbstractDB):
         text = sformat(filetostr(text), env) if isfile(text) else text
         # 1) Split text into branch
         branchs = splitby(r'SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;', text, re.I)
-        q = Queue(maxsize=0)
-        n = min(len(branchs),N)
-        for j in range(n-1):
-            worker = Thread(target=sql_worker, args=(q,))
-            worker.setDaemon(True)
-            worker.start()
-        for text in branchs[:-1]:
-            SqliteDB.ExecuteBranch( text, env, outputmode, verbose, q)
 
-        q.join()
+        nb = len(branchs)
+        n = min(nb-1,N)
+        p = Pool(n)
+        p.map( sql_worker ,branchs[0:nb-1], [env, outputmode, verbose] *(nb-1)  )
+        p.close()
+        p.join()
+
         last_branch = branchs[-1]
-        res = SqliteDB.ExecuteBranch(last_branch,env,outputmode,verbose,q = None)
+        res = SqliteDB.ExecuteBranch(last_branch,env,outputmode,verbose)
         return res
 
 
