@@ -298,7 +298,7 @@ class SqliteDB(AbstractDB):
                     mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else "sync"
 
                     print "--"*40
-                    if mode=="async" or j<nb-1:
+                    if mode=="async" and j<nb-1:
                         print "go parallel!"
                         print text
                         p = Process(target=sql_worker, args=(text,env,outputmode,verbose) )
