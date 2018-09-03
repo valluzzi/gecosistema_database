@@ -30,9 +30,8 @@ try:
 except:
     from abstractdb import *
 from gecosistema_core import *
-#from Queue import Queue
-#from threading import Thread
-from multiprocessing import Pool
+
+from multiprocessing import Process
 
 def splitby(pattern, text, flags=0):
     """
@@ -50,15 +49,6 @@ def splitby(pattern, text, flags=0):
         end = idxs[j]
         res.append( text[start:end])
     return res
-
-def sql_worker(args):
-    """
-    sql_worker
-    """
-    sql,env,outputmode,verbose = args
-    SqliteDB.ExecuteBranch(sql, env, outputmode, verbose)
-
-
 
 class SqliteDB(AbstractDB):
     """
@@ -245,14 +235,10 @@ class SqliteDB(AbstractDB):
         """
         db = False
         res = None
+        mode="sync"
         # 0) check if text is empty
         if text.strip('\t\r\n ')=="":
             return res
-
-        # 0a)
-        g = re.search(r'SELECT\s+\'WAIT\'\s*;', text, flags=re.I | re.M)
-        if g and q:
-            q.join()
 
         # 1a) detect dsn to use
         g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
@@ -276,10 +262,10 @@ class SqliteDB(AbstractDB):
             flags=re.I | re.M)
         # print ">>",imports
         for (modulename, fnames) in imports:
-            db.load_function(modulename, fnames, verbose=verbose)
+            db.load_function(modulename, fnames, verbose=False)
 
         # 2) finally execute the script
-        res= db.execute(text, env, outputmode=outputmode, verbose=verbose)
+        res= db.execute(text, env, outputmode=outputmode, verbose=False)
 
         return res
 
@@ -288,23 +274,55 @@ class SqliteDB(AbstractDB):
         """
         ExecuteP - Parallel
         """
+        t1 = now()
         res = None
-        N = cpu_count()
         text = sformat(filetostr(text), env) if isfile(text) else text
         # 1) Split text into branch
-        branchs = splitby(r'SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;', text, re.I)
+        branchs = splitby(r'(SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;)|(SELECT\s+WAIT\s*;)', text, re.I)
 
         nb = len(branchs)
-        n = min(nb-1,N)
-        p = Pool(n)
-        p.map( sql_worker ,branchs[0:nb-1], [env, outputmode, verbose] *(nb-1)  )
-        p.close()
-        p.join()
+        running_processes = [] # running processes
 
-        last_branch = branchs[-1]
-        res = SqliteDB.ExecuteBranch(last_branch,env,outputmode,verbose)
+        for j in range(nb):
+            text = branchs[j]
+            g = re.search(r'SELECT\s+\'WAIT\'\s*;', text, flags=re.I | re.M)
+            if g:
+                print "--------------------- JOIN-----------------------------"
+                [p.join() for p in running_processes]
+                running_processes = []
+                checkpoint(t1,"t1")
+                t1= now()
+            else:
+                g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
+                if g:
+                    mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else "sync"
+
+                    print "--"*40
+                    if mode=="async" or j<nb-1:
+                        print "go parallel!"
+                        print text
+                        p = Process(target=sql_worker, args=(text,env,outputmode,verbose) )
+                        p.daemon=True
+                        running_processes.append(p)
+                        p.start()
+                    else:
+                        print "go in master thread"
+                        print text
+                        if j==nb-1:
+                           [p.join() for p in running_processes]
+                        res = SqliteDB.ExecuteBranch(text,env,outputmode,verbose)
+
+        checkpoint(t1,"t1")
         return res
 
+def sql_worker(sql,env,outputmode,verbose):
+    """
+    sql_worker
+    """
+    t1 = now()
+    print "Process Started"
+    SqliteDB.ExecuteBranch(sql, env, outputmode, verbose)
+    print "[%s] Task done in %s!"%(sql[:32],time_from(t1))
 
 if __name__ == "__main__":
     import os
