@@ -272,14 +272,14 @@ class AbstractDB:
             fieldnames += ["""PRIMARY KEY(%s)""" % (",".join(wrap(primarykeys, "[", "]")))]
         fieldnames = ",".join(fieldnames)
 
-        temp = "TEMP" if Temp else ""
+        temp = "TEMPORARY" if Temp else ""
         tablename = tablename.strip("[]")
-        env = {"tablename": tablename, "TEMP": temp, "fieldnames": fieldnames}
+        env = {"tablename": tablename, "TEMPORARY": temp, "fieldnames": fieldnames}
         sql = """"""
         if overwrite:
             sql += """DROP TABLE IF EXISTS [{tablename}];"""
 
-        sql += """CREATE {TEMP} TABLE IF NOT EXISTS [{tablename}]({fieldnames});"""
+        sql += """CREATE {TEMPORARY} TABLE IF NOT EXISTS [{tablename}]({fieldnames});"""
         self.execute(sql, env, verbose=verbose)
 
         return tablename
