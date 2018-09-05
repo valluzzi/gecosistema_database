@@ -252,6 +252,38 @@ class AbstractDB:
         """
         return self.execute(sql, env, outputmode=outputmode, verbose=verbose)
 
+    def createTable(self, tablename, fieldlist,
+                    typelist=None,
+                    primarykeys=None,
+                    Temp=False,
+                    overwrite=False,
+                    verbose=False):
+        """
+        Create a Table from field list
+        """
+        fieldlist = trim(listify(fieldlist))
+        typelist = trim(listify(typelist, ","))
+        primarykeys = trim(listify(primarykeys))
+
+        # print(fieldlist,typelist,primarykeys)
+        typelist = [""] * len(fieldlist) if not typelist else typelist
+        fieldnames = ["[%s] %s" % (fieldname, fieldtype) for (fieldname, fieldtype) in zip(fieldlist, typelist)]
+        if primarykeys:
+            fieldnames += ["""PRIMARY KEY(%s)""" % (",".join(wrap(primarykeys, "[", "]")))]
+        fieldnames = ",".join(fieldnames)
+
+        temp = "TEMP" if Temp else ""
+        tablename = tablename.strip("[]")
+        env = {"tablename": tablename, "TEMP": temp, "fieldnames": fieldnames}
+        sql = """"""
+        if overwrite:
+            sql += """DROP TABLE IF EXISTS [{tablename}];"""
+
+        sql += """CREATE {TEMP} TABLE IF NOT EXISTS [{tablename}]({fieldnames});"""
+        self.execute(sql, env, verbose=verbose)
+
+        return tablename
+
 
     def toCsv(self, filename, tables="", sep=";", decimal=".", verbose=True):
         """

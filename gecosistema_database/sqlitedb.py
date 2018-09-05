@@ -23,33 +23,16 @@
 # Created:     31/07/2018
 # ------------------------------------------------------------------------------
 import os,sys,re
-import csv
+import unicodecsv as csv
 import sqlite3 as sqlite
 import inspect
-try:
-    from .abstractdb import *
-except:
-    from abstractdb import *
+from .abstractdb import *
+from .sql_utils import *
 from gecosistema_core import *
 
 from multiprocessing import Process
 
-def splitby(pattern, text, flags=0):
-    """
-    splitby -  split text by pattern
-    """
-    res = []
-    idxs = [0]
-    p = re.compile(pattern, flags)
-    for m in p.finditer(text):
-        #print m.start(), m.group()
-        idxs+= [m.start()]
-    idxs+=[len(text)+1]
-    for j in range(1,len(idxs)):
-        start = idxs[j-1]
-        end = idxs[j]
-        res.append( text[start:end])
-    return res
+
 
 class SqliteDB(AbstractDB):
     """
@@ -229,10 +212,56 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
+    def createTableFromCSV(self, filename,
+                           sep=";",
+                           tablename="",
+                           primarykeys="",
+                           append=False,
+                           Temp=False,
+                           nodata=["", "Na", "NaN", "-", "--", "N/A"],
+                           verbose=False):
+        """
+        createTableFromCSV - make a read-pass to detect data fieldtype
+        """
+        primarykeys = trim(listify(primarykeys))
+        # ---------------------------------------------------------------------------
+        #   Open the stream
+        # ---------------------------------------------------------------------------
+        with open(filename, "rb") as stream:
+            # ---------------------------------------------------------------------------
+            #   decode data lines
+            # ---------------------------------------------------------------------------
+            fieldnames = []
+            fieldtypes = []
+            n = 1
+            line_no = 0
+            header_line_no = 0
+            csvreader = csv.reader(stream, delimiter=sep, quotechar='"')
+
+            for line in csvreader:
+                line = [unicode(cell, 'utf-8-sig') for cell in line]
+                if len(line) < n:
+                    # skip empty lines
+                    pass
+                elif not fieldtypes:
+                    n = len(line)
+                    fieldtypes = [''] * n
+                    fieldnames = line
+                    header_line_no = line_no
+                else:
+                    fieldtypes = [SQLTYPES[min(SQLTYPES[item1], SQLTYPES[item2])] for (item1, item2) in
+                                  zip(sqltype(line, nodata=nodata), fieldtypes)]
+
+                line_no += 1
+
+            self.createTable(tablename, fieldnames, fieldtypes, primarykeys, Temp=Temp, overwrite=not append,
+                             verbose=verbose)
+            return (fieldnames, fieldtypes, header_line_no)
+
+
     def importCsv(self, filename, sep=";",
                   tablename="",
                   primarykeys="",
-                  guess_primary_key=True,
                   append=False,
                   Temp=False,
                   nodata=["", "Na", "NaN", "-", "--", "N/A"], verbose=False):
@@ -241,8 +270,8 @@ class SqliteDB(AbstractDB):
         """
         tablename = tablename if tablename else juststem(filename)
         if self.createTableFromCSV:
-            (fieldnames, fieldtypes, header_line_no) = self.createTableFromCSV(filename, tablename, append, sep,
-                                                                           primarykeys, Temp, nodata, verbose)
+            (fieldnames, fieldtypes, header_line_no) = self.createTableFromCSV(filename, sep, tablename, primarykeys,
+                                                                               append, Temp, nodata, verbose)
         else:
             (fieldnames, fieldtypes, header_line_no) = [],[],0
         # ---------------------------------------------------------------------------
