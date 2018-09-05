@@ -213,7 +213,7 @@ class SqliteDB(AbstractDB):
             self.executeMany(sql, env, values, commit, verbose)
 
     def createTableFromCSV(self, filename,
-                           sep=";",
+                           dialect = False,
                            tablename="",
                            primarykeys="",
                            append=False,
@@ -228,6 +228,12 @@ class SqliteDB(AbstractDB):
         #   Open the stream
         # ---------------------------------------------------------------------------
         with open(filename, "rb") as stream:
+
+            # detect the dialect
+            if not dialect:
+                dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,")
+                stream.seek(0)
+
             # ---------------------------------------------------------------------------
             #   decode data lines
             # ---------------------------------------------------------------------------
@@ -236,7 +242,7 @@ class SqliteDB(AbstractDB):
             n = 1
             line_no = 0
             header_line_no = 0
-            csvreader = csv.reader(stream, delimiter=sep, quotechar='"')
+            csvreader = csv.reader(stream, dialect)
 
             for line in csvreader:
                 line = [unicode(cell, 'utf-8-sig') for cell in line]
@@ -268,9 +274,15 @@ class SqliteDB(AbstractDB):
         """
         importCsv
         """
+        #detect the dialect
+        dialect = None
+        with open(filename, "rb") as stream:
+            dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,")
+            stream.seek(0)
+
         tablename = tablename if tablename else juststem(filename)
         if self.createTableFromCSV:
-            (fieldnames, fieldtypes, header_line_no) = self.createTableFromCSV(filename, sep, tablename, primarykeys,
+            (fieldnames, fieldtypes, header_line_no) = self.createTableFromCSV(filename, dialect, tablename, primarykeys,
                                                                                append, Temp, nodata, verbose)
         else:
             (fieldnames, fieldtypes, header_line_no) = [],[],0
@@ -280,9 +292,11 @@ class SqliteDB(AbstractDB):
         data = []
         line_no = 0
         with open(filename, "rb") as stream:
-            csvreader = csv.reader(stream, delimiter=sep, quotechar='"')
+            dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,")
+            stream.seek(0)
+            reader = csv.reader(stream, dialect)
 
-            for line in csvreader:
+            for line in reader:
                 if line_no > header_line_no:
                     line = [unicode(cell, 'utf-8-sig') for cell in line]
                     #if len(line) == n:
