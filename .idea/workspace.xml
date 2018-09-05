@@ -36,12 +36,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="6013" />
+          <entry key="py" value="6143" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="6013" />
+          <entry key="Python" value="6143" />
         </counts>
       </usages-collector>
     </session>
@@ -75,8 +75,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="232" column="27" selection-start-line="232" selection-start-column="27" selection-end-line="232" selection-end-column="27" />
+            <state relative-caret-position="437">
+              <caret line="299" column="77" selection-start-line="299" selection-start-column="77" selection-end-line="299" selection-end-column="77" />
               <folding>
                 <element signature="e#926#942#0" expanded="true" />
               </folding>
@@ -265,12 +265,12 @@
     <frame x="-8" y="-1088" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.45482865" visible="true" weight="0.19704953" />
-      <window_info id="Structure" order="1" sideWeight="0.5451713" side_tool="true" visible="true" weight="0.19704953" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45467627" visible="true" weight="0.19704953" />
+      <window_info id="Structure" order="1" sideWeight="0.5453237" side_tool="true" visible="true" weight="0.19704953" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.27829698" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27829698" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -368,8 +368,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="232" column="27" selection-start-line="232" selection-start-column="27" selection-end-line="232" selection-end-column="27" />
+        <state relative-caret-position="437">
+          <caret line="299" column="77" selection-start-line="299" selection-start-column="77" selection-end-line="299" selection-end-column="77" />
           <folding>
             <element signature="e#926#942#0" expanded="true" />
           </folding>

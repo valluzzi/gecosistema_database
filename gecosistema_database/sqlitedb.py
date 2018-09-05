@@ -26,8 +26,13 @@ import os,sys,re
 import unicodecsv as csv
 import sqlite3 as sqlite
 import inspect
-from .abstractdb import *
-from .sql_utils import *
+try:
+    from .abstractdb import *
+    from .sql_utils import *
+except:
+    from abstractdb import *
+    from sql_utils import *
+
 from gecosistema_core import *
 
 from multiprocessing import Process
@@ -277,7 +282,7 @@ class SqliteDB(AbstractDB):
         #detect the dialect
         dialect = None
         with open(filename, "rb") as stream:
-            dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,")
+            dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,\t ")
             stream.seek(0)
 
         tablename = tablename if tablename else juststem(filename)
@@ -292,7 +297,7 @@ class SqliteDB(AbstractDB):
         data = []
         line_no = 0
         with open(filename, "rb") as stream:
-            dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,")
+            dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,\t ")
             stream.seek(0)
             reader = csv.reader(stream, dialect)
 
@@ -406,7 +411,8 @@ if __name__ == "__main__":
     import os
 
     chdir(r'D:\Program Files (x86)\SICURA\apps\irriclime\lib\sql')
-    print os.getcwd()
-
-    text = filetostr(r"test.sql")
-    SqliteDB.ExecuteP(text,{"hello":1})
+    filedb = "test.sqlite"
+    filecsv = 'G:/Il mio Drive/Projects/3_R&D_CLARA_IDR_31012017_S/IRRICLIME_dev/database/nobackup/smhid10/sm_loucr/R_scripts/export/export_CLARA_GECOS/outputs/198101/timeCPRC_250.txt'
+    db = SqliteDB(filedb)
+    db.importCsv(filecsv)
+    db.close()
