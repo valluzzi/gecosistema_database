@@ -270,7 +270,7 @@ class SqliteDB(AbstractDB):
             return (fieldnames, fieldtypes, header_line_no)
 
 
-    def importCsv(self, filename, sep=";",
+    def importCsv(self, filename,
                   tablename="",
                   primarykeys="",
                   append=False,

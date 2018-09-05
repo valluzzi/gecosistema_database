@@ -22,7 +22,7 @@
 #
 # Created:     29/08/2018
 # -------------------------------------------------------------------------------
-from gecosistema_core import mapify
+from gecosistema_core import *
 from .sqlitedb import SqliteDB
 from builtins import str as unicode
 
@@ -40,10 +40,14 @@ def SQL_EXEC(sql, args):
 
     return 0
 
-def IMPORT(filedb, filecsv):
+def IMPORT(filedb, filecsv, tablename=False, append=False, Temp=False):
     """
     IMPORT - import a csv file
     """
     db = SqliteDB(filedb)
-    db.importCsv( filecsv )
+    if directory(filecsv):
+        for filename in ls(filecsv,r'.*\.(csv|txt|xls)'):
+            db.importCsv( filename, tablename, primarykeys="", append=append, Temp=Temp):
+    elif isfile(filecsv):
+        db.importCsv( filecsv )
     db.close()
