@@ -40,4 +40,10 @@ def SQL_EXEC(sql, args):
 
     return 0
 
-def IMPORT(filecsv,filedb)
+def IMPORT(filecsv,filedb):
+    """
+    IMPORT - import a csv file
+    """
+    db = SqliteDB(filedb)
+    db.importCsv( filecsv ):
+    db.close()
