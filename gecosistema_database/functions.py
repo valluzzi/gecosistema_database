@@ -47,7 +47,7 @@ def IMPORT(filedb, filecsv, tablename=False, append=False, Temp=False):
     db = SqliteDB(filedb)
     if directory(filecsv):
         for filename in ls(filecsv,r'.*\.(csv|txt|xls)'):
-            db.importCsv( filename, tablename, primarykeys="", append=append, Temp=Temp):
+            db.importCsv( filename, tablename, primarykeys="", append=append, Temp=Temp)
     elif isfile(filecsv):
         db.importCsv( filecsv )
     db.close()
