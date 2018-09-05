@@ -24,7 +24,6 @@
 # -------------------------------------------------------------------------------
 from gecosistema_core import mapify
 from .sqlitedb import SqliteDB
-import json
 from builtins import str as unicode
 
 
@@ -40,3 +39,5 @@ def SQL_EXEC(sql, args):
         manage(ex)
 
     return 0
+
+def IMPORT(filecsv,filedb)

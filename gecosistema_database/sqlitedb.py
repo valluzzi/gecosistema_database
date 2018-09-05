@@ -23,6 +23,7 @@
 # Created:     31/07/2018
 # ------------------------------------------------------------------------------
 import os,sys,re
+import csv
 import sqlite3 as sqlite
 import inspect
 try:
@@ -227,6 +228,40 @@ class SqliteDB(AbstractDB):
                 return
 
             self.executeMany(sql, env, values, commit, verbose)
+
+    def importCsv(self, filename, sep=";",
+                  tablename="",
+                  primarykeys="",
+                  guess_primary_key=True,
+                  append=False,
+                  Temp=False,
+                  nodata=["", "Na", "NaN", "-", "--", "N/A"], verbose=False):
+        """
+        importCsv
+        """
+        tablename = tablename if tablename else juststem(filename)
+        if self.createTableFromCSV:
+            (fieldnames, fieldtypes, header_line_no) = self.createTableFromCSV(filename, tablename, append, sep,
+                                                                           primarykeys, Temp, nodata, verbose)
+        else:
+            (fieldnames, fieldtypes, header_line_no) = [],[],0
+        # ---------------------------------------------------------------------------
+        #   Open the stream
+        # ---------------------------------------------------------------------------
+        data = []
+        line_no = 0
+        with open(filename, "rb") as stream:
+            csvreader = csv.reader(stream, delimiter=sep, quotechar='"')
+
+            for line in csvreader:
+                if line_no > header_line_no:
+                    line = [unicode(cell, 'utf-8-sig') for cell in line]
+                    #if len(line) == n:
+                    data.append(line)
+                line_no += 1
+
+            values = [parseValue(row,nodata) for row in data]
+            self.insertMany(tablename, values, verbose=verbose)
 
     @staticmethod
     def ExecuteBranch( text, env=None, outputmode="cursor", verbose=False):
