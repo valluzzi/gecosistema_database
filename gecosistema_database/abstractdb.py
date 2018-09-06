@@ -116,7 +116,7 @@ class AbstractDB:
         rows = []
         cursor = self.__get_cursor__()
         env = env.copy() if env else {}
-        #env.update(os.environ)
+        env.update(os.environ)
         if cursor:
             sql, env = self.__prepare_query__(sql, env, verbose)
 
