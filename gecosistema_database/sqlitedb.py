@@ -359,6 +359,7 @@ class SqliteDB(AbstractDB):
         """
         t1 = now()
         res = None
+        env.update(os.environ)
         text = sformat(filetostr(text), env) if isfile(text) else text
         # 1) Split text into branch
         branchs = splitby(r'(SELECT\s+\'.*\'\s*(?:,\s*\'a?sync\')?;)|(SELECT\s+WAIT\s*;)', text, re.I)
