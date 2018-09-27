@@ -4,7 +4,6 @@
     <list default="true" id="59c31411-1539-4ef2-9446-aa01ab98a322" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gecosistema_database/abstractdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/gecosistema_database/abstractdb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" beforeDir="false" afterPath="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,12 +15,12 @@
     <session id="25151398">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
-          <entry key="project.open.time.0" value="6" />
-          <entry key="project.open.time.1" value="7" />
+          <entry key="project.closed" value="13" />
+          <entry key="project.open.time.0" value="8" />
+          <entry key="project.open.time.1" value="9" />
           <entry key="project.open.time.2" value="2" />
-          <entry key="project.open.time.5" value="2" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.open.time.5" value="3" />
+          <entry key="project.opened" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -38,23 +37,23 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="6329" />
+          <entry key="py" value="6333" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="6329" />
+          <entry key="Python" value="6333" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gecosistema_database/abstractdb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="118" column="8" selection-start-line="118" selection-start-column="8" selection-end-line="118" selection-end-column="8" />
+            <state relative-caret-position="384">
+              <caret line="226" column="53" selection-start-line="226" selection-start-column="53" selection-end-line="226" selection-end-column="53" />
               <folding>
                 <element signature="e#928#944#0" expanded="true" />
               </folding>
@@ -63,28 +62,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gecosistema_database/functions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="846">
-              <caret line="49" column="88" selection-start-line="49" selection-start-column="88" selection-end-line="49" selection-end-column="88" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/site-packages/gecosistema_core/filesystem.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="221" column="4" selection-start-line="221" selection-start-column="4" selection-end-line="221" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="361" column="9" selection-start-line="361" selection-start-column="9" selection-end-line="361" selection-end-column="9" />
+            <state relative-caret-position="96">
+              <caret line="195" column="11" lean-forward="true" selection-start-line="195" selection-start-column="11" selection-end-line="195" selection-end-column="11" />
               <folding>
                 <element signature="e#926#942#0" expanded="true" />
               </folding>
@@ -145,16 +126,16 @@
         <option value="$PROJECT_DIR$/gecosistema_database/sql_utils.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/__init__.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/functions.py" />
-        <option value="$PROJECT_DIR$/gecosistema_database/abstractdb.py" />
         <option value="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" />
+        <option value="$PROJECT_DIR$/gecosistema_database/abstractdb.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
-    <option name="y" value="-1088" />
-    <option name="width" value="1936" />
-    <option name="height" value="1096" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -271,11 +252,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-1088" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.45467627" visible="true" weight="0.19704953" />
-      <window_info id="Structure" order="1" sideWeight="0.5453237" side_tool="true" weight="0.19704953" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45171848" visible="true" weight="0.19642857" />
+      <window_info active="true" id="Structure" order="1" sideWeight="0.5482815" side_tool="true" visible="true" weight="0.19642857" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -354,13 +335,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gecosistema_database/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="846">
-          <caret line="49" column="88" selection-start-line="49" selection-start-column="88" selection-end-line="49" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/sql_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1710">
@@ -380,27 +354,34 @@
     </entry>
     <entry file="file://C:/Python27/Lib/site-packages/gecosistema_core/filesystem.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
+        <state relative-caret-position="524">
           <caret line="221" column="4" selection-start-line="221" selection-start-column="4" selection-end-line="221" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gecosistema_database/abstractdb.py">
+    <entry file="file://$PROJECT_DIR$/gecosistema_database/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="118" column="8" selection-start-line="118" selection-start-column="8" selection-end-line="118" selection-end-column="8" />
-          <folding>
-            <element signature="e#928#944#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="524">
+          <caret line="49" column="88" selection-start-line="49" selection-start-column="88" selection-end-line="49" selection-end-column="88" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="361" column="9" selection-start-line="361" selection-start-column="9" selection-end-line="361" selection-end-column="9" />
+        <state relative-caret-position="96">
+          <caret line="195" column="11" lean-forward="true" selection-start-line="195" selection-start-column="11" selection-end-line="195" selection-end-column="11" />
           <folding>
             <element signature="e#926#942#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gecosistema_database/abstractdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="226" column="53" selection-start-line="226" selection-start-column="53" selection-end-line="226" selection-end-column="53" />
+          <folding>
+            <element signature="e#928#944#0" expanded="true" />
           </folding>
         </state>
       </provider>

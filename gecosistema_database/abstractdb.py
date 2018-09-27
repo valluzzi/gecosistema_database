@@ -223,8 +223,8 @@ class AbstractDB:
                 print("->%s:Done in (%.2f)s" % (line[:], (t2 - t1)))
 
         except Exception as ex:
-            command = command.encode('ascii', 'ignore').replace("\n", " ")
-            print( "No!:SQL Exception:%s :(%s)"%(command,ex))
+            line = line.encode('ascii', 'ignore').replace("\n", " ")
+            print( "No!:SQL Exception:%s :(%s)"%(line,ex))
 
     def select(self, tablename, fieldnames="*", orderby="", limit=-1, outputmode="array", verbose=False):
         """
