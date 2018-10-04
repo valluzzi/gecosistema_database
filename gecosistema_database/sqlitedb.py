@@ -319,7 +319,6 @@ class SqliteDB(AbstractDB):
         db = False
         res = None
         mode="sync"
-        env.update(os.environ)
         # 0) check if text is empty
         if text.strip('\t\r\n ')=="":
             return res
@@ -328,7 +327,6 @@ class SqliteDB(AbstractDB):
         g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
         if g:
             filedb = g.groupdict()["filedb"]
-            filedb = sformat(filedb,env)
             mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else mode
             if justext(filedb).lower() in ('db', 'sqlite'):
                 db = SqliteDB(filedb)
