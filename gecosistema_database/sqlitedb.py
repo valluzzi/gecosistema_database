@@ -319,6 +319,7 @@ class SqliteDB(AbstractDB):
         db = False
         res = None
         mode="sync"
+        env.update(os.environ)
         # 0) check if text is empty
         if text.strip('\t\r\n ')=="":
             return res
