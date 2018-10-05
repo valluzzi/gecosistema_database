@@ -327,6 +327,8 @@ class SqliteDB(AbstractDB):
         g = re.search(r'^SELECT\s+\'(?P<filedb>.*?)\'\s*(?:,\s*\'(?P<mode>a?sync)\')?;', text, flags=re.I | re.M)
         if g:
             filedb = g.groupdict()["filedb"]
+            env.update(os.environ)
+            filedb = sformat(filedb,env)
             mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else mode
             if justext(filedb).lower() in ('db', 'sqlite'):
                 db = SqliteDB(filedb)
@@ -401,7 +403,7 @@ class SqliteDB(AbstractDB):
 
 def sql_worker(sql,env,outputmode,verbose):
     """
-    sql_worker
+    sql_worker -  called by ExecuteP
     """
     t1 = now()
     print "Process Started"
