@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="59c31411-1539-4ef2-9446-aa01ab98a322" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" beforeDir="false" afterPath="$PROJECT_DIR$/gecosistema_database/sqlitedb.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,12 +14,13 @@
     <session id="25151398">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="15" />
+          <entry key="project.closed" value="20" />
           <entry key="project.open.time.0" value="9" />
-          <entry key="project.open.time.1" value="10" />
+          <entry key="project.open.time.1" value="11" />
+          <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.2" value="2" />
-          <entry key="project.open.time.5" value="3" />
-          <entry key="project.opened" value="24" />
+          <entry key="project.open.time.5" value="6" />
+          <entry key="project.opened" value="29" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -69,8 +69,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="329" column="34" selection-start-line="329" selection-start-column="34" selection-end-line="329" selection-end-column="34" />
+            <state relative-caret-position="456">
+              <caret line="287" column="61" lean-forward="true" selection-start-line="287" selection-start-column="61" selection-end-line="287" selection-end-column="61" />
               <folding>
                 <element signature="e#926#942#0" expanded="true" />
               </folding>
@@ -137,8 +137,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-5" />
-    <option name="y" value="89" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -150,7 +150,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,6 +166,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -260,8 +260,8 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.44844517" visible="true" weight="0.19642857" />
-      <window_info id="Structure" order="1" sideWeight="0.5515548" side_tool="true" visible="true" weight="0.19642857" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.44026187" visible="true" weight="0.19642857" />
+      <window_info active="true" id="Structure" order="1" sideWeight="0.55973816" side_tool="true" visible="true" weight="0.19642857" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3289689" />
@@ -383,8 +383,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gecosistema_database/sqlitedb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="329" column="34" selection-start-line="329" selection-start-column="34" selection-end-line="329" selection-end-column="34" />
+        <state relative-caret-position="456">
+          <caret line="287" column="61" lean-forward="true" selection-start-line="287" selection-start-column="61" selection-end-line="287" selection-end-column="61" />
           <folding>
             <element signature="e#926#942#0" expanded="true" />
           </folding>
