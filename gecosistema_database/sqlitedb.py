@@ -59,8 +59,8 @@ class SqliteDB(AbstractDB):
         self.pragma("journal_mode=WAL",verbose=verbose)
         self.pragma("foreign_keys=ON",verbose=verbose)
         self.pragma("cache_size=4000",verbose=verbose)
-        self.conn.enable_load_extension(True)
         self.load_extension(modules, verbose=verbose)
+        self.conn.enable_load_extension(True)
 
     def __connect__(self):
         """
