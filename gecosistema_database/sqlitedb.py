@@ -60,7 +60,7 @@ class SqliteDB(AbstractDB):
         self.pragma("foreign_keys=ON",verbose=verbose)
         self.pragma("cache_size=4000",verbose=verbose)
         self.conn.enable_load_extension(True)
-        self.load_extension(modules,verbose=verbose)
+        self.load_extension(modules, verbose=verbose)
 
     def __connect__(self):
         """
