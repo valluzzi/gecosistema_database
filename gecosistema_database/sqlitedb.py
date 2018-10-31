@@ -218,24 +218,40 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
-    def detectDialect(self, filename, comments="#", n=2048):
+    def skip_commented_or_empty_lines(self,stream,comment="#"):
+        """
+        skip_commented_or_empty_lines
+        """
+        offset = stream.tell()
+        line = stream.readline()
+        while line and (line.decode("utf-8-sig").strip("\t ")=="" or line.decode("utf-8-sig").strip("\t ").startswith(comment)):
+            #print "skipping line..%s..."%line[:80]
+            offset = stream.tell()
+            line = stream.readline()
+
+        stream.seek(offset)
+        return stream
+
+    def detectDialect(self, filename, comment="#"):
         """
         detectDialect
         """
         dialect = None
         with open(filename, "rb") as stream:
-            counter = 10
-            line = stream.readline()
-            while line and line.decode("utf-8-sig").strip("\t ").startswith("#") and counter<10:
-                counter +=1
-                line = stream.readline()
-
-            dialect = csv.Sniffer().sniff(stream.read(n), delimiters=";,\t ")
+            stream = self.skip_commented_or_empty_lines(stream, comment)
+            n= 128
+            detected = False
+            while not detected:
+                try:
+                    dialect = csv.Sniffer().sniff(stream.read(n), delimiters=";,")
+                    detected = True
+                except Exception as ex:
+                    #print ex,"n=",n
+                    n = n*2
             stream.seek(0)
         return dialect
 
     def createTableFromCSV(self, filename,
-                           dialect = False,
                            tablename="",
                            primarykeys="",
                            append=False,
@@ -252,9 +268,7 @@ class SqliteDB(AbstractDB):
         with open(filename, "rb") as stream:
 
             # detect the dialect
-            if not dialect:
-                dialect = self.detectDialect(filename)
-
+            dialect = self.detectDialect(filename)
             # ---------------------------------------------------------------------------
             #   decode data lines
             # ---------------------------------------------------------------------------
@@ -263,11 +277,12 @@ class SqliteDB(AbstractDB):
             n = 1
             line_no = 0
             header_line_no = 0
+            stream = self.skip_commented_or_empty_lines(stream)
             csvreader = csv.reader(stream, dialect)
 
             for line in csvreader:
                 line = [unicode(cell, 'utf-8-sig') for cell in line]
-                if len(line) < n or line.startswith("#"):
+                if len(line) < n:
                     # skip empty lines
                     pass
                 elif not fieldtypes:
@@ -297,7 +312,7 @@ class SqliteDB(AbstractDB):
         """
         tablename = tablename if tablename else juststem(filename)
         if self.createTableFromCSV:
-            (fieldnames, fieldtypes, header_line_no, dialect) = self.createTableFromCSV(filename, None, tablename, primarykeys,
+            (fieldnames, fieldtypes, header_line_no, dialect) = self.createTableFromCSV(filename, tablename, primarykeys,
                                                                                append, Temp, nodata, verbose)
         else:
             (fieldnames, fieldtypes, header_line_no, dialect) = [],[],0, self.detectDialect(filename)
@@ -307,7 +322,7 @@ class SqliteDB(AbstractDB):
         data = []
         line_no = 0
         with open(filename, "rb") as stream:
-
+            self.skip_commented_or_empty_lines(stream)
             reader = csv.reader(stream, dialect)
 
             for line in reader:
@@ -422,9 +437,7 @@ def sql_worker(sql,env,outputmode,verbose):
 if __name__ == "__main__":
     import os
 
-    chdir(r'D:\Program Files (x86)\SICURA\apps\irriclime\lib\sql')
-    filedb = "test.sqlite"
-    filecsv = 'G:/Il mio Drive/Projects/3_R&D_CLARA_IDR_31012017_S/IRRICLIME_dev/database/nobackup/smhid10/sm_loucr/R_scripts/export/export_CLARA_GECOS/outputs/198101/timeCPRC_250.txt'
-    db = SqliteDB(filedb)
+    filecsv = r'D:\Program Files (x86)\SICURA\apps\scht\data\BETANIA5int.csv'
+    db = SqliteDB(":memory:")
     db.importCsv(filecsv)
     db.close()
