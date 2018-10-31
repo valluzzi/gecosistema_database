@@ -253,7 +253,7 @@ class SqliteDB(AbstractDB):
 
             # detect the dialect
             if not dialect:
-                dialect = detectDialect(filename)
+                dialect = self.detectDialect(filename)
 
             # ---------------------------------------------------------------------------
             #   decode data lines
@@ -300,7 +300,7 @@ class SqliteDB(AbstractDB):
             (fieldnames, fieldtypes, header_line_no, dialect) = self.createTableFromCSV(filename, None, tablename, primarykeys,
                                                                                append, Temp, nodata, verbose)
         else:
-            (fieldnames, fieldtypes, header_line_no, dialect) = [],[],0, detectDialect(filename)
+            (fieldnames, fieldtypes, header_line_no, dialect) = [],[],0, self.detectDialect(filename)
         # ---------------------------------------------------------------------------
         #   Open the stream
         # ---------------------------------------------------------------------------
