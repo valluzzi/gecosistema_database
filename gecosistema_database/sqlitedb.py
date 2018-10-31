@@ -218,6 +218,22 @@ class SqliteDB(AbstractDB):
 
             self.executeMany(sql, env, values, commit, verbose)
 
+    def detectDialect(self, filename, comments="#", n=2048):
+        """
+        detectDialect
+        """
+        dialect = None
+        with open(filename, "rb") as stream:
+            counter = 10
+            line = stream.readline()
+            while line and line.decode("utf-8-sig").strip("\t ").startswith("#") and counter<10:
+                counter +=1
+                line = stream.readline()
+
+            dialect = csv.Sniffer().sniff(stream.read(n), delimiters=";,\t ")
+            stream.seek(0)
+        return dialect
+
     def createTableFromCSV(self, filename,
                            dialect = False,
                            tablename="",
@@ -237,9 +253,7 @@ class SqliteDB(AbstractDB):
 
             # detect the dialect
             if not dialect:
-                stream.readline()
-                dialect = csv.Sniffer().sniff(stream.read(1024), delimiters=";,")
-                stream.seek(0)
+                dialect = detectDialect(filename)
 
             # ---------------------------------------------------------------------------
             #   decode data lines
@@ -253,7 +267,7 @@ class SqliteDB(AbstractDB):
 
             for line in csvreader:
                 line = [unicode(cell, 'utf-8-sig') for cell in line]
-                if len(line) < n:
+                if len(line) < n or line.startswith("#"):
                     # skip empty lines
                     pass
                 elif not fieldtypes:
@@ -269,7 +283,7 @@ class SqliteDB(AbstractDB):
 
             self.createTable(tablename, fieldnames, fieldtypes, primarykeys, Temp=Temp, overwrite=not append,
                              verbose=verbose)
-            return (fieldnames, fieldtypes, header_line_no)
+            return (fieldnames, fieldtypes, header_line_no, dialect)
 
 
     def importCsv(self, filename,
@@ -281,28 +295,19 @@ class SqliteDB(AbstractDB):
         """
         importCsv
         """
-        #detect the dialect
-        dialect = None
-        with open(filename, "rb") as stream:
-            stream.readline()
-            dialect = csv.Sniffer().sniff(stream.read(2048), delimiters=";,\t ")
-            stream.seek(0)
-
         tablename = tablename if tablename else juststem(filename)
         if self.createTableFromCSV:
-            (fieldnames, fieldtypes, header_line_no) = self.createTableFromCSV(filename, dialect, tablename, primarykeys,
+            (fieldnames, fieldtypes, header_line_no, dialect) = self.createTableFromCSV(filename, None, tablename, primarykeys,
                                                                                append, Temp, nodata, verbose)
         else:
-            (fieldnames, fieldtypes, header_line_no) = [],[],0
+            (fieldnames, fieldtypes, header_line_no, dialect) = [],[],0, detectDialect(filename)
         # ---------------------------------------------------------------------------
         #   Open the stream
         # ---------------------------------------------------------------------------
         data = []
         line_no = 0
         with open(filename, "rb") as stream:
-            stream.readline()
-            dialect = csv.Sniffer().sniff(stream.read(2048), delimiters=";,\t ")
-            stream.seek(0)
+
             reader = csv.reader(stream, dialect)
 
             for line in reader:
