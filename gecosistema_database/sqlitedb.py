@@ -283,6 +283,7 @@ class SqliteDB(AbstractDB):
         #detect the dialect
         dialect = None
         with open(filename, "rb") as stream:
+            stream.readline()
             dialect = csv.Sniffer().sniff(stream.read(2048), delimiters=";,\t ")
             stream.seek(0)
 
