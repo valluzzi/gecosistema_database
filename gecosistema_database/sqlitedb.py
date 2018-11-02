@@ -313,7 +313,7 @@ class SqliteDB(AbstractDB):
         tablename = tablename if tablename else juststem(filename)
         if self.createTableFromCSV:
             (fieldnames, fieldtypes, header_line_no, dialect) = self.createTableFromCSV(filename, tablename, primarykeys,
-                                                                               append, Temp, nodata, verbose)
+                                                                               append, Temp, nodata, verbose=True)
         else:
             (fieldnames, fieldtypes, header_line_no, dialect) = [],[],0, self.detectDialect(filename)
         # ---------------------------------------------------------------------------
