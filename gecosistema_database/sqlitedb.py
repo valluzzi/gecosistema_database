@@ -328,8 +328,8 @@ class SqliteDB(AbstractDB):
             for line in reader:
                 if line_no > header_line_no:
                     line = [unicode(cell, 'utf-8-sig') for cell in line]
-                    #if len(line) == n:
-                    data.append(line)
+                    if len(line) == len(fieldnames):
+                        data.append(line)
                 line_no += 1
 
             values = [parseValue(row,nodata) for row in data]
