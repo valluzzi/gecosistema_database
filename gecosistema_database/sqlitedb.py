@@ -278,10 +278,10 @@ class SqliteDB(AbstractDB):
             line_no = 0
             header_line_no = 0
             stream = self.skip_commented_or_empty_lines(stream)
-            csvreader = csv.reader(stream, dialect)
+            reader = csv.reader(stream, dialect, encoding="utf-8-sig")
 
-            for line in csvreader:
-                line = [unicode(cell, 'utf-8-sig') for cell in line]
+            for line in reader:
+                #line = [unicode(cell, 'utf-8-sig') for cell in line]
                 if len(line) < n:
                     # skip empty lines
                     pass
@@ -313,7 +313,7 @@ class SqliteDB(AbstractDB):
         tablename = tablename if tablename else juststem(filename)
         if self.createTableFromCSV:
             (fieldnames, fieldtypes, header_line_no, dialect) = self.createTableFromCSV(filename, tablename, primarykeys,
-                                                                               append, Temp, nodata, verbose=True)
+                                                                               append, Temp, nodata, verbose)
         else:
             (fieldnames, fieldtypes, header_line_no, dialect) = [],[],0, self.detectDialect(filename)
         # ---------------------------------------------------------------------------
