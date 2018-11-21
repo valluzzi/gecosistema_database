@@ -75,7 +75,6 @@ class SqliteDB(AbstractDB):
             print(err)
             self.close()
 
-
     def pragma(self, text, env={}, verbose=True):
         """
         pragma
@@ -87,6 +86,24 @@ class SqliteDB(AbstractDB):
             self.conn.execute("PRAGMA " + text)
         except sqlite.Error as err:
             print(err)
+
+    def attach(self,filename,aliasname=None):
+        """
+        attach
+        """
+        if isfile(filename):
+            aliasname = aliasname if aliasname else juststem(filename)
+            sql = """ATTACH DATABASE '{filename}' AS [{aliasname}];"""
+            self.execute(sql,{"filename":filename,"aliasname":aliasname},verbose= False)
+            return aliasname
+        return None
+
+    def detach(self,aliasname):
+        """
+        detach
+        """
+        sql = """DETACH DATABASE [{aliasname}];"""
+        self.execute(sql,{"aliasname":aliasname})
 
     def create_function(self, func, nargs, fname):
         """
