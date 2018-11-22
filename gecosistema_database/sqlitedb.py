@@ -173,7 +173,6 @@ class SqliteDB(AbstractDB):
         except Exception as ex2:
             print("module <%s> not found. searching <%s>:%s" % (modulename, fnames, ex2))
 
-
     def GetTables(self, like="%"):
         """
         GetTables - Return a list with all tablenames
@@ -187,6 +186,12 @@ class SqliteDB(AbstractDB):
         table_list = [item[0] for item in table_list]
         return table_list
 
+    def TableExists(self, tablename):
+        """
+        TableExists
+        """
+        table_list  = self.GetTables(tablename)
+        return tablename in table_list
 
     def GetFieldNames(self, tablename, ctype="", typeinfo=False):
         """
