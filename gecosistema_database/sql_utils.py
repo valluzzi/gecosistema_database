@@ -92,6 +92,10 @@ def sqltype(cvalue, ctype=xlrd.XL_CELL_TEXT, nodata=("", "Na", "NaN", "-", "--",
     else:
         return 'TEXT'
 
+
+
+
+
 def splitby(pattern, text, flags=0):
     """
     splitby -  split text by pattern
