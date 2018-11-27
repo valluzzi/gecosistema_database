@@ -55,6 +55,13 @@ class AbstractDB:
                 print("closing db...")
             self.conn.close()
 
+    def commit(self):
+        """
+        force commit
+        """
+        if self.conn:
+            self.conn.commit()
+
     def __del__(self):
         """
         destructor
