@@ -175,6 +175,8 @@ class AbstractDB:
                 row = cursor.fetchone()
                 if row and len(row):
                     return row
+                if cursor.description:
+                    return tuple([None]*len(cursor.description))
                 return None
 
             elif outputmode == "table":
