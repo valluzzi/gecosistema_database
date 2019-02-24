@@ -61,7 +61,7 @@ class AbstractDB:
         """
         if self.conn:
             self.conn.commit()
-, epsg=3857
+
     def __del__(self):
         """
         destructor
