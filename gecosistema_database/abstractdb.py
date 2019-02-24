@@ -189,7 +189,7 @@ class AbstractDB:
                     columns = [item[0] for item in cursor.description]
                     for row in cursor:
                         line = {}
-                        for j in range(len(row)):e
+                        for j in range(len(row)):
                             line[columns[j]] = row[j]
                         rows.append(line)
 
