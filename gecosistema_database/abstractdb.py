@@ -61,7 +61,7 @@ class AbstractDB:
         """
         if self.conn:
             self.conn.commit()
-
+, epsg=3857
     def __del__(self):
         """
         destructor
@@ -169,8 +169,13 @@ class AbstractDB:
                 row = cursor.fetchone()
                 if row and len(row):
                     return row[0]
-                else:
-                    return None
+                return None
+
+            elif outputmode == "first-row":
+                row = cursor.fetchone()
+                if row and len(row):
+                    return row
+                return None
 
             elif outputmode == "table":
                 metadata = cursor.description
@@ -179,12 +184,12 @@ class AbstractDB:
                 for row in cursor:
                     rows.append(row)
 
-            elif outputmode == "object":
+            elif outputmode in ( "object", "dict" ):
                 if cursor.description:
                     columns = [item[0] for item in cursor.description]
                     for row in cursor:
                         line = {}
-                        for j in range(len(row)):
+                        for j in range(len(row)):e
                             line[columns[j]] = row[j]
                         rows.append(line)
 
