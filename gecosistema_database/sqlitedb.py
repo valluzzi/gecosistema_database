@@ -419,7 +419,7 @@ class SqliteDB(AbstractDB):
             text = branchs[j]
             g = re.search(r'SELECT\s+\'WAIT\'\s*;', text, flags=re.I | re.M)
             if g:
-                print "--------------------- JOIN-----------------------------"
+                print("--------------------- JOIN-----------------------------")
                 [p.join() for p in running_processes]
                 running_processes = []
                 checkpoint(t1,"t1")
@@ -429,17 +429,17 @@ class SqliteDB(AbstractDB):
                 if g:
                     mode   = g.groupdict()["mode"] if "mode" in g.groupdict() else "sync"
 
-                    print "--"*40
+                    print("--"*40)
                     if mode=="async" and j<nb-1:
-                        print "go parallel!"
-                        print text
+                        print("go parallel!")
+                        print(text)
                         p = Process(target=sql_worker, args=(text,env,outputmode,verbose) )
                         p.daemon=True
                         running_processes.append(p)
                         p.start()
                     else:
-                        print "go in master thread"
-                        print text
+                        print("go in master thread")
+                        print(text)
                         if j==nb-1:
                            [p.join() for p in running_processes]
                         res = SqliteDB.ExecuteBranch(text,env,outputmode,verbose)
@@ -452,9 +452,9 @@ def sql_worker(sql,env,outputmode,verbose):
     sql_worker -  called by ExecuteP
     """
     t1 = now()
-    print "Process Started"
+    print("Process Started")
     SqliteDB.ExecuteBranch(sql, env, outputmode, verbose)
-    print "[%s] Task done in %s!"%(sql[:32],time_from(t1))
+    print("[%s] Task done in %s!"%(sql[:32],time_from(t1)))
 
 if __name__ == "__main__":
     import os
